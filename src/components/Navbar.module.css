@@ -1,0 +1,527 @@
+.headerWrapper {
+    width: 100%;
+    display: contents;
+}
+
+.stickyBox {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--background);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    /* Optional: ensures separation when scrolled */
+}
+
+.announcementBar {
+    background-color: var(--foreground);
+    color: var(--background);
+    text-align: center;
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.logoSection {
+    padding: 1.5rem 0 1rem;
+    text-align: center;
+}
+
+.logo {
+    font-family: var(--font-logo);
+    font-size: 2.2rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--foreground);
+    text-align: center;
+    display: inline-block;
+}
+
+.topSection {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.topContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+/* Custom Category Dropdown */
+.categoryDropdownWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.categorySelectBtn {
+    background: transparent;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--foreground);
+    cursor: pointer;
+    padding-right: 1.5rem;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 0.2s ease;
+}
+
+.categorySelectBtn:hover,
+.categorySelectBtn[aria-expanded="true"] {
+    color: var(--primary);
+}
+
+.categoryChevron {
+    position: absolute;
+    right: 0;
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rotate {
+    transform: rotate(180deg);
+}
+
+.customDropdownMenu {
+    position: absolute;
+    top: calc(100% + 20px);
+    left: -1rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08), 0 2px 10px rgba(0, 0, 0, 0.04);
+    min-width: 260px;
+    z-index: 100;
+    animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dropdownHeader {
+    padding: 1.2rem 1.25rem 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.dropdownTitle {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.dropdownList {
+    list-style: none;
+    padding: 0.5rem;
+    margin: 0;
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+.dropdownItem {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    padding: 0.85rem 1rem;
+    color: var(--foreground);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    font-weight: 500;
+}
+
+.dropdownItem:hover {
+    background-color: #f7f7f7;
+    color: var(--primary);
+    transform: translateX(4px);
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Search Container */
+.searchContainer {
+    flex: 1;
+    max-width: 650px;
+    display: flex;
+    align-items: center;
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+    padding: 0.5rem 1rem 0.5rem 1.5rem;
+    position: relative;
+}
+
+.searchInput {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.9rem;
+    color: var(--foreground);
+    padding: 0.3rem 0;
+}
+
+.searchInput::placeholder {
+    color: #888;
+}
+
+.searchBtn {
+    color: var(--foreground);
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Actions Box */
+.actionsBox {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.iconBtn,
+.cartBtn {
+    color: var(--foreground);
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: opacity 0.2s;
+    text-decoration: none;
+}
+
+.iconBtn:hover,
+.cartBtn:hover {
+    opacity: 0.7;
+}
+
+.cartIconWrapper {
+    position: relative;
+    display: flex;
+}
+
+.badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background-color: var(--foreground);
+    color: var(--background);
+    font-size: 0.65rem;
+    font-weight: bold;
+    height: 16px;
+    width: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* Currency Selector */
+.currencySelector {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: #555;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.separator {
+    color: #ccc;
+    margin: 0 0.2rem;
+}
+
+.flag {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.langText {
+    font-weight: 500;
+    color: var(--foreground);
+}
+
+/* Bottom Section Navigation */
+.bottomSection {
+    padding: 1rem 0;
+}
+
+.navLinks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+}
+
+.navLink {
+    color: var(--foreground);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s;
+}
+
+.navLink:hover {
+    color: var(--primary);
+}
+
+.navChevron {
+    opacity: 0.8;
+    transition: transform 0.3s ease;
+}
+
+/* Mega Menu Styles */
+.megaMenuContainer {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.catalogLink {
+    padding: 1rem 0;
+    /* Creates hover bridge */
+}
+
+.megaMenuDropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 800px;
+    background-color: #ffffff;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+    z-index: 100;
+    animation: megaMenuFadeIn 0.2s ease-out forwards;
+    border: 1px solid #ebebeb;
+    border-top: none;
+    overflow: hidden;
+    margin-left: -50px;
+    /* Offset to align somewhat nicely with nav */
+}
+
+.megaMenuLayout {
+    display: flex;
+    min-height: 400px;
+}
+
+.megaMenuLeft {
+    width: 250px;
+    background-color: #fafafa;
+    border-right: 1px solid #ebebeb;
+    padding: 1rem 0;
+}
+
+.megaMenuCategoryList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.megaMenuCategoryBtn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: #444;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.megaMenuCategoryBtn:hover,
+.activeMegaMenuCat {
+    background-color: #ffffff;
+    color: #000;
+    font-weight: 600;
+}
+
+.categoryArrowRight {
+    transform: rotate(-90deg);
+    opacity: 0.5;
+}
+
+.megaMenuCategoryBtn:hover .categoryArrowRight,
+.activeMegaMenuCat .categoryArrowRight {
+    opacity: 1;
+    transform: rotate(-90deg) translateX(2px);
+}
+
+.megaMenuRight {
+    flex: 1;
+    padding: 1.5rem 2rem;
+    background-color: #ffffff;
+}
+
+.megaMenuHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.5rem;
+}
+
+.megaMenuHeader h4 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    margin: 0;
+    color: #000;
+}
+
+.viewAllLink {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #666;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.viewAllLink:hover {
+    color: #000;
+}
+
+.megaMenuProductsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.megaMenuProductCard {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease;
+}
+
+.megaMenuProductCard:hover {
+    transform: translateY(-2px);
+}
+
+.megaMenuProductImage {
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    position: relative;
+}
+
+.megaMenuProductImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.megaMenuProductCard:hover .megaMenuProductImage img {
+    transform: scale(1.05);
+}
+
+.megaMenuProductName {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #000;
+    margin: 0 0 0.25rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.megaMenuProductPrice {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #000;
+    margin: 0;
+}
+
+.noProductsText {
+    font-family: var(--font-sans);
+    color: #888;
+    font-size: 0.9rem;
+    grid-column: 1 / -1;
+}
+
+@keyframes megaMenuFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .topContainer {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .searchContainer {
+        order: 3;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .currencySelector {
+        display: none;
+    }
+
+    .navLinks {
+        gap: 1.5rem;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 0.5rem;
+    }
+
+    .megaMenuContainer {
+        position: static;
+    }
+
+    .megaMenuDropdown {
+        display: none;
+        /* Hide mega menu completely on mobile, they can click catalog */
+    }
+}

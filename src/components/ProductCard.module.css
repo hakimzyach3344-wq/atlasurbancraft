@@ -1,0 +1,178 @@
+.productCard {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+}
+
+.imageWrapper {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
+    background-color: #f7f7f7;
+    margin-bottom: 1.25rem;
+}
+
+.imageLink {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.primaryImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.primaryImage.hasSecondary {
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.productCard:hover .primaryImage {
+    transform: scale(1.05);
+}
+
+.productCard:hover .primaryImage.hasSecondary {
+    opacity: 0;
+}
+
+.secondaryImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.productCard:hover .secondaryImage {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.floatingAction {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0.75rem;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+}
+
+.productCard:hover .floatingAction {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.quickAddBtn {
+    width: 100%;
+    background: linear-gradient(to right, #ffffff 50%, #000000 50%);
+    background-size: 200% 100%;
+    background-position: right;
+    color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 50px;
+    padding: 0.85rem 1rem;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+.quickAddBtn:hover {
+    background-position: left;
+    color: #000000;
+}
+
+.quickAddIcon {
+    display: flex;
+    align-items: center;
+}
+
+.quickAddIcon svg {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.productInfo {
+    text-align: left;
+}
+
+.productType {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.35rem;
+}
+
+.typeLink {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.typeLink:hover {
+    color: var(--foreground);
+}
+
+.productTitle {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--foreground);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.titleLink {
+    color: inherit;
+    text-decoration: none;
+}
+
+.titleLink:hover {
+    text-decoration: underline;
+}
+
+.productPriceWrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+}
+
+.priceFrom {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.productPrice {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--foreground);
+}
