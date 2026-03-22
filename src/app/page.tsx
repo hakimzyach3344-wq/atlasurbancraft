@@ -10,22 +10,22 @@ const SHOP_COLLECTIONS = [
   {
     name: "Lighting",
     href: "/category/lighting",
-    image: "https://www.insideast.com/cdn/shop/files/hammered-bronze-finish-bowl-plate-pendant-light-solid-brass-ceiling-light-3143320.webp?v=1773579130&width=1100"
+    image: "/images/hero/hammered-bronze-finish-bowl-plate-pendant-light-solid-brass-ceiling-light-3143320.webp"
   },
   {
     name: "Hooks",
     href: "/category/hardware",
-    image: "https://www.insideast.com/cdn/shop/files/single-hook-solid-unlacquered-brass-handmade-brass-hook-coat-hook-wall-hook-2330421.png?v=1773579314&width=1100"
+    image: "/images/hero/single-hook-solid-unlacquered-brass-handmade-brass-hook-coat-hook-wall-hook-2330421.png"
   },
   {
     name: "Holders",
     href: "/category/hardware",
-    image: "https://www.insideast.com/cdn/shop/files/unlacquered-brass-wall-mount-toothbrush-holder-bathroom-9955571.jpg?v=1773578834&width=1100"
+    image: "/images/hero/unlacquered-brass-wall-mount-toothbrush-holder-bathroom-9955571.jpg"
   },
   {
     name: "Sinks",
     href: "/category/sinks",
-    image: "https://www.insideast.com/cdn/shop/files/il_1588xN.6134663069_c72e.avif?v=1759147675&width=1100"
+    image: "/images/hero/il_1588xN.6134663069_c72e.avif"
   }
 ];
 

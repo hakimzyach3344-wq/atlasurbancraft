@@ -11,21 +11,21 @@ const SLIDES = [
         title: "Luxury You Feel Every Day",
         buttonText: "Shop Sinks",
         buttonLink: "/category/sinks",
-        image: "https://www.insideast.com/cdn/shop/files/Generated_Image_January_10_2026_-_1_26PM.jpg?v=1771411692&width=3200"
+        image: "/images/hero/Generated_Image_January_10_2026_-_1_26PM.jpg"
     },
     {
         subtitle: "Customize every detail to fit your space",
         title: "Made to Outlast Trends",
         buttonText: "Customize Your Fixture",
         buttonLink: "/customization",
-        image: "https://www.insideast.com/cdn/shop/files/DSC09203.jpg?v=1770656354&width=3200"
+        image: "/images/hero/DSC09203.jpg"
     },
     {
         subtitle: "Handcrafted by master artisans",
         title: "Crafted in small batches",
         buttonText: "Explore Collections",
         buttonLink: "/catalog",
-        image: "https://www.insideast.com/cdn/shop/files/Generated_Image_January_12_2026_-_8_58PM.jpg?v=1771411793&width=3200"
+        image: "/images/hero/Generated_Image_January_12_2026_-_8_58PM.jpg"
     }
 ];
 
