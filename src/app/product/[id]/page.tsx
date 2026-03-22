@@ -327,6 +327,22 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                     </section>
                 )}
             </div>
+
+            {/* Sticky Mobile Bottom Bar */}
+            <div className={styles.stickyMobileBar}>
+                <button className={styles.stickyBtnCart} onClick={() => addItem(product)}>
+                    Add to Cart
+                </button>
+                <button
+                    className={styles.stickyBtnBuy}
+                    onClick={() => {
+                        addItem(product);
+                        openCheckoutDrawer();
+                    }}
+                >
+                    Buy it Now
+                </button>
+            </div>
         </div>
     );
 }

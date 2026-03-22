@@ -561,3 +561,74 @@
         gap: 1rem;
     }
 }
+
+/* === STICKY MOBILE BOTTOM BAR === */
+.stickyMobileBar {
+    display: none;
+    /* Hidden on desktop */
+}
+
+@media (max-width: 768px) {
+    .stickyMobileBar {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 900;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .stickyBtnCart {
+        flex: 1;
+        height: 50px;
+        font-family: var(--font-sans);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background-color: #ffffff;
+        color: #000000;
+        border: 2px solid #000000;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .stickyBtnCart:active {
+        background-color: #000000;
+        color: #ffffff;
+    }
+
+    .stickyBtnBuy {
+        flex: 1;
+        height: 50px;
+        font-family: var(--font-sans);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background-color: #000000;
+        color: #ffffff;
+        border: 2px solid #000000;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .stickyBtnBuy:active {
+        background-color: #333333;
+    }
+
+    /* Add padding to bottom of page so sticky bar doesn't overlap content */
+    .container {
+        padding-bottom: 5rem;
+    }
+}
