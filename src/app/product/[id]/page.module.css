@@ -469,11 +469,15 @@
     /* Right column spacing */
     .rightColumn {
         padding: 0 1rem;
-        max-width: 100vw;
+        max-width: 320px;
+        /* Constrain exactly like the main image */
+        margin: 0 auto;
+        /* Center the column */
         overflow: hidden;
         min-width: 0;
         word-wrap: break-word;
         overflow-wrap: break-word;
+        text-align: center;
     }
 
     /* Typography */
@@ -521,6 +525,7 @@
     .description {
         font-size: 0.88rem;
         line-height: 1.7;
+        text-align: center;
     }
 
     .accordionHeader {
@@ -530,6 +535,7 @@
 
     .accordionContent {
         font-size: 0.88rem;
+        text-align: center;
     }
 
     .extraSection {
@@ -544,6 +550,7 @@
 
     .extraSectionContent {
         font-size: 0.88rem;
+        text-align: center;
     }
 
     /* Features */
