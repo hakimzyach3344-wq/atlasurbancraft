@@ -204,6 +204,42 @@
     }
 }
 
+@media (max-width: 768px) {
+    .collectionGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .collectionBtn {
+        padding: 0.65rem 1.5rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+    }
+
+    .collectionImageWrapper {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .collectionGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .collectionBtn {
+        padding: 0.55rem 1rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.05em;
+        gap: 0.15rem;
+    }
+
+    .btnIcon svg {
+        width: 1rem;
+        height: 1rem;
+    }
+}
+
 .collectionCard {
     display: flex;
     flex-direction: column;

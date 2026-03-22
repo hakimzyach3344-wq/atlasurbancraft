@@ -40,8 +40,20 @@ export default function Navbar() {
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
     const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
     const [activeMegaMenuCategory, setActiveMegaMenuCategory] = useState(CATEGORIES[0]);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isMobileCatalogOpen, setIsMobileCatalogOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const megaMenuRef = useRef<HTMLDivElement>(null);
+
+    // Lock body scroll when mobile menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => { document.body.style.overflow = ''; };
+    }, [isMobileMenuOpen]);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -140,6 +152,16 @@ export default function Navbar() {
                                 <span className={styles.langText}>EN</span>
                                 <ChevronDownIcon size={14} className={styles.langChevron} />
                             </div>
+                            {/* Hamburger Button - Mobile Only */}
+                            <button
+                                className={styles.hamburgerBtn}
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                aria-label="Menu"
+                            >
+                                <span className={`${styles.hamburgerLine} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`} />
+                                <span className={`${styles.hamburgerLine} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`} />
+                                <span className={`${styles.hamburgerLine} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`} />
+                            </button>
                         </div>
 
                     </div>
@@ -228,6 +250,54 @@ export default function Navbar() {
                     <Link href="/contact" className={styles.navLink}>Contact</Link>
                 </div>
             </nav>
+
+            {/* Mobile Menu Overlay */}
+            <div className={`${styles.mobileOverlay} ${isMobileMenuOpen ? styles.mobileOverlayOpen : ''}`} onClick={() => setIsMobileMenuOpen(false)} />
+
+            {/* Mobile Menu Drawer */}
+            <div className={`${styles.mobileDrawer} ${isMobileMenuOpen ? styles.mobileDrawerOpen : ''}`}>
+                <div className={styles.mobileDrawerHeader}>
+                    <span className={styles.mobileDrawerTitle}>Menu</span>
+                    <button className={styles.mobileCloseBtn} onClick={() => setIsMobileMenuOpen(false)} aria-label="Close menu">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div className={styles.mobileDrawerBody}>
+                    {/* Catalog Accordion */}
+                    <button className={styles.mobileNavItem} onClick={() => setIsMobileCatalogOpen(!isMobileCatalogOpen)}>
+                        Catalog
+                        <ChevronDownIcon size={16} className={`${styles.mobileChevron} ${isMobileCatalogOpen ? styles.rotate : ''}`} />
+                    </button>
+                    {isMobileCatalogOpen && (
+                        <div className={styles.mobileCatalogList}>
+                            {CATEGORIES.map(cat => (
+                                <Link
+                                    key={cat.slug}
+                                    href={`/category/${cat.slug}`}
+                                    className={styles.mobileCatalogItem}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    {cat.name}
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+
+                    <Link href="/our-story" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Our Story</Link>
+                    <Link href="/reviews" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Reviews</Link>
+                    <Link href="/blog" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Blog</Link>
+                    <Link href="/customization" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Customization</Link>
+                    <Link href="/trade-program" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Trade Program</Link>
+                    <Link href="/contact" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+                </div>
+
+                <div className={styles.mobileDrawerFooter}>
+                    <span className={styles.mobileFooterText}>🇺🇸 USD ($) · EN</span>
+                </div>
+            </div>
         </header>
     );
 }
