@@ -486,6 +486,11 @@
         font-size: 1.35rem;
         margin-bottom: 0.5rem;
         text-align: center;
+        max-width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        hyphens: auto;
     }
 
     .price {
