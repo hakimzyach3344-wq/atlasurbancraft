@@ -4,9 +4,12 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
-import { CATEGORIES } from '@/lib/categories';
-import productsData from '@/data/products.json';
+import { RAW_CATEGORIES } from '@/lib/constants';
 import styles from './Navbar.module.css';
+
+interface NavbarProps {
+    megaMenuProducts: Record<string, any[]>;
+}
 
 const ChevronDownIcon = ({ size = 16, className = "" }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -32,14 +35,14 @@ const ShoppingBagIcon = ({ size = 22, className = "" }) => (
     </svg>
 );
 
-export default function Navbar() {
+export default function Navbar({ megaMenuProducts = {} }: NavbarProps) {
     const router = useRouter();
     const { items } = useCart();
     const itemCount = items.reduce((total, item) => total + item.quantity, 0);
     const [searchQuery, setSearchQuery] = useState('');
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
     const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
-    const [activeMegaMenuCategory, setActiveMegaMenuCategory] = useState(CATEGORIES[0]);
+    const [activeMegaMenuCategory, setActiveMegaMenuCategory] = useState(RAW_CATEGORIES[0]);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobileCatalogOpen, setIsMobileCatalogOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -104,7 +107,7 @@ export default function Navbar() {
                                         <span className={styles.dropdownTitle}>Collections</span>
                                     </div>
                                     <ul className={styles.dropdownList}>
-                                        {CATEGORIES.map(cat => (
+                                        {RAW_CATEGORIES.map(cat => (
                                             <li key={cat.slug}>
                                                 <button
                                                     className={styles.dropdownItem}
@@ -188,7 +191,7 @@ export default function Navbar() {
                                     {/* Left: Category List */}
                                     <div className={styles.megaMenuLeft}>
                                         <ul className={styles.megaMenuCategoryList}>
-                                            {CATEGORIES.map(cat => (
+                                            {RAW_CATEGORIES.map(cat => (
                                                 <li key={cat.name}>
                                                     <Link
                                                         href={`/category/${cat.slug}`}
@@ -213,25 +216,21 @@ export default function Navbar() {
                                             </Link>
                                         </div>
                                         <div className={styles.megaMenuProductsGrid}>
-                                            {productsData
-                                                .filter(p => activeMegaMenuCategory.matches.some(match => p.category.toLowerCase().includes(match.toLowerCase())))
-                                                .slice(0, 4)
-                                                .map(product => (
-                                                    <Link
-                                                        href={`/product/${product.id}`}
-                                                        key={product.id}
-                                                        className={styles.megaMenuProductCard}
-                                                        onClick={() => setIsMegaMenuOpen(false)}
-                                                    >
-                                                        <div className={styles.megaMenuProductImage}>
-                                                            <img src={product.image} alt={product.name} />
-                                                        </div>
-                                                        <p className={styles.megaMenuProductName}>{product.name}</p>
-                                                        <p className={styles.megaMenuProductPrice}>${product.price.toFixed(2)}</p>
-                                                    </Link>
-                                                ))
-                                            }
-                                            {productsData.filter(p => activeMegaMenuCategory.matches.some(match => p.category.toLowerCase().includes(match.toLowerCase()))).length === 0 && (
+                                            {(megaMenuProducts[activeMegaMenuCategory.slug] || []).map(product => (
+                                                <Link
+                                                    href={`/product/${product.id}`}
+                                                    key={product.id}
+                                                    className={styles.megaMenuProductCard}
+                                                    onClick={() => setIsMegaMenuOpen(false)}
+                                                >
+                                                    <div className={styles.megaMenuProductImage}>
+                                                        <img src={product.image} alt={product.name} />
+                                                    </div>
+                                                    <p className={styles.megaMenuProductName}>{product.name}</p>
+                                                    <p className={styles.megaMenuProductPrice}>${product.price.toFixed(2)}</p>
+                                                </Link>
+                                            ))}
+                                            {(!megaMenuProducts[activeMegaMenuCategory.slug] || megaMenuProducts[activeMegaMenuCategory.slug].length === 0) && (
                                                 <p className={styles.noProductsText}>View collection for details.</p>
                                             )}
                                         </div>
@@ -273,7 +272,7 @@ export default function Navbar() {
                     </button>
                     {isMobileCatalogOpen && (
                         <div className={styles.mobileCatalogList}>
-                            {CATEGORIES.map(cat => (
+                            {RAW_CATEGORIES.map(cat => (
                                 <Link
                                     key={cat.slug}
                                     href={`/category/${cat.slug}`}

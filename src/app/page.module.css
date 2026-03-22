@@ -246,21 +246,28 @@
     text-align: center;
     position: relative;
     background: transparent;
+    height: 100%;
 }
 
 .collectionImageWrapper {
-    aspect-ratio: 1 / 1;
+    width: 100%;
+    padding-bottom: 100%;
+    /* Forces 1:1 aspect ratio */
+    position: relative;
     overflow: hidden;
     border-radius: 12px;
     margin-bottom: 2rem;
     background-color: #f7f7f7;
-    position: relative;
 }
 
 .collectionImage {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
     transition: transform var(--transition-slow);
 }
 
@@ -272,6 +279,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: auto;
+    /* Pushes button to bottom for alignment */
 }
 
 .collectionBtn {
