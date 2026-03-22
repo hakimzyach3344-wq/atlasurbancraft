@@ -2,9 +2,11 @@ import type { Metadata } from 'next';
 import { CartProvider } from '@/context/CartContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import CartPopup from '@/components/CartPopup';
-import CheckoutDrawer from '@/components/CheckoutDrawer';
+import dynamic from 'next/dynamic';
 import './globals.css';
+
+const CartPopup = dynamic(() => import('@/components/CartPopup'), { ssr: false });
+const CheckoutDrawer = dynamic(() => import('@/components/CheckoutDrawer'), { ssr: false });
 
 export const metadata: Metadata = {
   title: 'Atlas Urban Craft | Sophisticated Artisanal Decor',

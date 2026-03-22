@@ -7,7 +7,9 @@ import productsData from '@/data/products.json';
 import styles from './page.module.css';
 import React, { useState } from 'react';
 import ProductCard from '@/components/ProductCard';
-import ImageLightbox from '@/components/ImageLightbox';
+import dynamic from 'next/dynamic';
+
+const ImageLightbox = dynamic(() => import('@/components/ImageLightbox'), { ssr: false });
 
 // Renders text with clickable guide/spec sheet links
 const RichText = ({ text, productSlug }: { text: string, productSlug?: string }) => {

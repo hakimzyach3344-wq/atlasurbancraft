@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import productsData from '@/data/products.json';
 import ProductCard from '@/components/ProductCard';
-import { CATEGORIES } from '@/lib/categories';
 import HeroSlideshow from '@/components/HeroSlideshow';
 import TrustedPartners from '@/components/TrustedPartners';
 import styles from './page.module.css';
