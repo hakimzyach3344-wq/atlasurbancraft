@@ -7,6 +7,7 @@ import productsData from '@/data/products.json';
 import styles from './page.module.css';
 import React, { useState } from 'react';
 import ProductCard from '@/components/ProductCard';
+import ImageLightbox from '@/components/ImageLightbox';
 
 // Renders text with clickable guide/spec sheet links
 const RichText = ({ text, productSlug }: { text: string, productSlug?: string }) => {
@@ -87,8 +88,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
     // Prepare images array fallback
     const images = product.images && product.images.length > 0 ? product.images : [product.image];
-    // State for the main focused image
     const [mainImage, setMainImage] = useState(images[0]);
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
     // Helper for formatting text and brand swapping
     const formatText = (text: string) => {
@@ -205,7 +206,13 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                     {/* Left Sticky Column */}
                     <div className={styles.leftColumn}>
                         <div className={`${styles.imageGallery} slide-up`}>
-                            <img src={mainImage} alt={product.name} className={styles.mainImage} />
+                            <img
+                                src={mainImage}
+                                alt={product.name}
+                                className={styles.mainImage}
+                                onClick={() => setIsLightboxOpen(true)}
+                                style={{ cursor: 'zoom-in' }}
+                            />
 
                             {images.length > 1 && (
                                 <div className={styles.thumbnailStrip}>
@@ -343,6 +350,14 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                     Buy it Now
                 </button>
             </div>
+
+            {isLightboxOpen && (
+                <ImageLightbox
+                    images={images}
+                    initialIndex={images.indexOf(mainImage) >= 0 ? images.indexOf(mainImage) : 0}
+                    onClose={() => setIsLightboxOpen(false)}
+                />
+            )}
         </div>
     );
 }
