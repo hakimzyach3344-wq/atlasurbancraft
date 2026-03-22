@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
   --background: #ffffff;
@@ -10,8 +10,8 @@
   --accent: #e5e5e5;
   --text-muted: #666666;
 
-  --font-sans: 'Inter', sans-serif;
-  --font-serif: 'Inter', sans-serif;
+  --font-sans: 'Outfit', sans-serif;
+  --font-serif: 'Playfair Display', serif;
   --font-logo: 'Cinzel', serif;
   /* Fallback to sans for modern look */
 
