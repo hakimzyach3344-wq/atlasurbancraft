@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './HeroSlideshow.module.css';
 
 const SLIDES = [
@@ -46,10 +47,13 @@ export default function HeroSlideshow() {
                     className={`${styles.slide} ${index === currentSlide ? styles.active : ''}`}
                 >
                     <div className={styles.heroOverlay}></div>
-                    <img
+                    <Image
                         src={slide.image}
                         alt={slide.title}
                         className={styles.heroImage}
+                        fill
+                        priority={index === 0} // LCP optimization
+                        sizes="100vw"
                     />
                     <div className={styles.heroContent}>
                         <p className={`${styles.heroSubtitle} ${index === currentSlide ? 'slide-up' : ''}`}>

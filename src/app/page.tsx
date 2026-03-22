@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import productsData from '@/data/products.json';
 import ProductCard from '@/components/ProductCard';
 import { CATEGORIES } from '@/lib/categories';
@@ -127,7 +128,13 @@ export default function Home() {
           {SHOP_COLLECTIONS.map((col, index) => (
             <div key={col.name} className={`${styles.collectionCard} fade-in`} style={{ animationDelay: `${index * 0.15}s` }}>
               <div className={styles.collectionImageWrapper}>
-                <img src={col.image} alt={col.name} className={styles.collectionImage} loading="lazy" />
+                <Image
+                  src={col.image}
+                  alt={col.name}
+                  className={styles.collectionImage}
+                  fill
+                  sizes="(max-width: 600px) 100vw, 25vw"
+                />
               </div>
               <div className={styles.collectionInfo}>
                 <Link href={col.href} className={styles.collectionBtn}>
