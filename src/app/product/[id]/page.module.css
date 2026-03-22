@@ -436,11 +436,12 @@
     }
 
     .mainImage {
-        aspect-ratio: 4 / 3;
-        /* Shorter than desktop square, fits better on phone */
+        aspect-ratio: auto;
+        /* Remove fixed ratio so max-height controls */
         border-radius: 8px;
-        max-height: 320px;
+        max-height: 250px;
         width: 100%;
+        object-fit: cover;
     }
 
     .imageGallery {
