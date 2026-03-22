@@ -3,9 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #111111;
-  --primary: #B85C38;
-  /* Artisan Copper Accent */
-  --primary-hover: #964728;
+  --primary: #1A4D2E;
+  /* Royal Emerald Accent */
+  --primary-hover: #143F25;
   --secondary: #f4f4f4;
   --accent: #e5e5e5;
   --text-muted: #666666;

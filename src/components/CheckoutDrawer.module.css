@@ -26,7 +26,7 @@
 }
 
 .header {
-    background-color: #1c1c1c;
+    background-color: var(--primary);
     color: #ffffff;
     padding: 1.25rem 1.5rem;
     display: flex;
@@ -190,8 +190,8 @@
 }
 
 .inputField:focus {
-    border-color: #000000;
-    box-shadow: 0 0 0 1px #000000;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 1px var(--primary);
 }
 
 .inputGroup {
@@ -266,8 +266,8 @@
 }
 
 .stripeInput:focus {
-    border-color: #000000;
-    box-shadow: inset 0 0 0 1px #000000;
+    border-color: var(--primary);
+    box-shadow: inset 0 0 0 1px var(--primary);
     z-index: 1;
 }
 
@@ -321,13 +321,13 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    background: linear-gradient(to right, #ffffff 50%, #1c1c1c 50%);
+    background: linear-gradient(to right, #ffffff 50%, var(--primary) 50%);
     background-size: 200% 100%;
     background-position: right;
     color: #ffffff;
     padding: 1rem;
     border-radius: 50px;
-    border: 1px solid #1c1c1c;
+    border: 1px solid var(--primary);
     font-family: var(--font-sans);
     font-size: 1rem;
     font-weight: 700;
@@ -339,7 +339,7 @@
 
 .payBtn:hover {
     background-position: left;
-    color: #1c1c1c;
+    color: var(--primary);
 }
 
 .secureBadge {
