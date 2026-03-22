@@ -432,7 +432,12 @@
     /* Images — constrained and shorter */
     .leftColumn {
         width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        /* Critical fix to prevent flex child blowout from thumbnail strip */
         position: relative;
+        overflow: hidden;
+        /* Prevent ANY child from forcing it wider */
     }
 
     .mainImage {
@@ -448,6 +453,7 @@
 
     .imageGallery {
         gap: 0.65rem;
+        max-width: 100%;
     }
 
     .thumbnailStrip {
@@ -463,6 +469,11 @@
     /* Right column spacing */
     .rightColumn {
         padding: 0 1rem;
+        max-width: 100vw;
+        overflow: hidden;
+        min-width: 0;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     /* Typography */
