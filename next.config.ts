@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: 'www.insideast.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.shopify.com',
+        pathname: '/**',
+      },
     ],
   },
 };
