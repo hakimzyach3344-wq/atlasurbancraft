@@ -481,11 +481,9 @@
         text-align: center;
     }
 
-    /* Buttons — full-width stacked */
+    /* Hide inline buttons on mobile — sticky bar replaces them */
     .actions {
-        flex-direction: column;
-        gap: 0.65rem;
-        width: 100%;
+        display: none;
     }
 
     .btnCart,
