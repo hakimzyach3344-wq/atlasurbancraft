@@ -3,9 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #111111;
-  --primary: #1A4D2E;
-  /* Royal Emerald Accent */
-  --primary-hover: #143F25;
+  --primary: #111111;
+  --primary-hover: #333333;
   --secondary: #f4f4f4;
   --accent: #e5e5e5;
   --text-muted: #666666;
