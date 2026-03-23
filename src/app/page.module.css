@@ -207,7 +207,7 @@
 @media (max-width: 768px) {
     .collectionGrid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
+        gap: 2rem 1rem;
     }
 
     .collectionBtn {
@@ -247,6 +247,7 @@
     position: relative;
     background: transparent;
     height: 100%;
+    padding-bottom: 1rem;
 }
 
 .collectionImageWrapper {

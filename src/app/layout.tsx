@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CartPopup from '@/components/CartPopup';
 import CheckoutDrawer from '@/components/CheckoutDrawer';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -45,6 +46,7 @@ export default function RootLayout({
           <CheckoutDrawer />
           <main>{children}</main>
           <Footer />
+          <SpeedInsights />
         </CartProvider>
       </body>
     </html>
