@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700;800&display=swap');
 
 :root {
   --background: #ffffff;
@@ -12,6 +12,7 @@
   --font-sans: 'Outfit', sans-serif;
   --font-serif: 'Playfair Display', serif;
   --font-logo: 'Cinzel', serif;
+  --font-title: 'Montserrat', sans-serif;
   /* Fallback to sans for modern look */
 
   --transition-fast: 0.15s ease-out;
@@ -57,7 +58,7 @@ a {
 }
 
 a:hover {
-  color: var(--primary);
+  color: #888888;
 }
 
 button {
