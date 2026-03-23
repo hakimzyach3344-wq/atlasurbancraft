@@ -46,11 +46,12 @@ export default function ChatWidget() {
             localStorage.setItem('chat_messages', JSON.stringify([welcomeMsg]));
         }
 
-        // 3. Connect Socket.IO
-        socketRef.current = io(window.location.origin);
+        // 3. Connect Socket.IO to external backend
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+        socketRef.current = io(backendUrl);
 
         socketRef.current.on('connect', () => {
-            console.log("Connected to chat server");
+            console.log("Connected to remote chat server");
             socketRef.current?.emit('register_session', currentSessionId);
         });
 
@@ -80,9 +81,9 @@ export default function ChatWidget() {
         }
     }, [messages, isTyping, isOpen]);
 
-    const handleSend = (e: React.FormEvent) => {
+    const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!input.trim() || !socketRef.current) return;
+        if (!input.trim()) return;
 
         const newMsg: Message = {
             id: uuidv4(),
@@ -97,11 +98,21 @@ export default function ChatWidget() {
         setInput('');
         setIsTyping(true);
 
-        // Send to custom server
-        socketRef.current.emit('send_message', {
-            sessionId,
-            text: newMsg.text
-        });
+        // Send to Railway Backend via REST API
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+        try {
+            await fetch(`${backendUrl}/chat/send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sessionId,
+                    text: newMsg.text
+                })
+            });
+        } catch (error) {
+            console.error("Failed to send message:", error);
+            setIsTyping(false);
+        }
     };
 
     const toggleChat = () => setIsOpen(!isOpen);
