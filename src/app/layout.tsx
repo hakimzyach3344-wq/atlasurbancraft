@@ -15,6 +15,8 @@ export const metadata: Metadata = {
 import { RAW_CATEGORIES } from '@/lib/constants';
 import productsData from '@/data/products.json';
 
+import ChatWidget from '@/components/chat/ChatWidget';
+
 export default function RootLayout({
   children,
 }: {
@@ -45,6 +47,7 @@ export default function RootLayout({
           <CartPopup />
           <CheckoutDrawer />
           <main>{children}</main>
+          <ChatWidget />
           <Footer />
           <SpeedInsights />
         </CartProvider>
@@ -52,3 +55,4 @@ export default function RootLayout({
     </html>
   );
 }
+

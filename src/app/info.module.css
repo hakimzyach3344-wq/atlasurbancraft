@@ -335,4 +335,10 @@
     .blogGrid {
         grid-template-columns: 1fr;
     }
+
+    .ctaBtn {
+        padding: 0.7rem 2rem;
+        font-size: 0.8rem;
+        min-height: 42px;
+    }
 }

@@ -1,0 +1,350 @@
+.widgetContainer {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
+.widgetContainer * {
+    pointer-events: auto;
+}
+
+.floatingBtn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #25D366;
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s;
+    border: none;
+    padding: 12px;
+}
+
+.floatingBtn:hover {
+    transform: scale(1.1);
+}
+
+.floatingBtn.active {
+    background-color: #000000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.floatingBtn svg {
+    width: 100%;
+    height: 100%;
+}
+
+.tooltip {
+    background-color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    position: relative;
+    max-width: 200px;
+    animation: fadeIn 0.3s ease-out forwards;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tooltip p {
+    font-size: 0.9rem;
+    color: #333;
+    margin: 0;
+}
+
+.closeTooltip {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.chatWindow {
+    width: 350px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.chatHeader {
+    background-color: #000000;
+    padding: 1.25rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #333;
+    position: relative;
+    background-image: url('https://ui-avatars.com/api/?name=Atlas+Support&background=333&color=fff');
+    background-size: cover;
+}
+
+.onlineStatus {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #25D366;
+    border: 2px solid #000;
+}
+
+.agentName {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.statusText {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin: 0;
+}
+
+.closeChat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.chatBody {
+    padding: 0;
+    background-color: #f4f4f4;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+}
+
+.welcomeMessage {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    height: 100%;
+}
+
+.logoCircle {
+    width: 60px;
+    height: 60px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.welcomeMessage h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #000;
+}
+
+.welcomeMessage p {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+.messagesList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.messageWrapper {
+    max-width: 85%;
+    display: flex;
+    flex-direction: column;
+}
+
+.userMsg {
+    align-self: flex-end;
+}
+
+.agentMsg {
+    align-self: flex-start;
+}
+
+.messageBubble {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+.userMsg .messageBubble {
+    background-color: #000;
+    color: #fff;
+    border-bottom-right-radius: 2px;
+}
+
+.agentMsg .messageBubble {
+    background-color: #fff;
+    color: #000;
+    border-bottom-left-radius: 2px;
+}
+
+.messageBubble p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.msgTime {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    margin-top: 0.4rem;
+    display: block;
+    text-align: right;
+}
+
+.continueWA {
+    margin-top: 0.75rem;
+    background-color: #25D366;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.continueWA:hover {
+    transform: translateY(-2px);
+}
+
+.chatFooterInput {
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.textInput {
+    flex: 1;
+    border: none;
+    background: #f4f4f4;
+    padding: 0.6rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.sendIconBtn {
+    background: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+
+.sendIconBtn svg {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.chatFooter {
+    padding: 0.75rem;
+    text-align: center;
+    border-top: 1px solid #eee;
+}
+
+.chatFooter p {
+    font-size: 0.7rem;
+    color: #999;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .widgetContainer {
+        bottom: 1rem;
+        right: 1rem;
+    }
+
+    .chatWindow {
+        width: calc(100vw - 2rem);
+        max-width: 350px;
+    }
+
+    .floatingBtn {
+        width: 54px;
+        height: 54px;
+        padding: 10px;
+    }
+}

@@ -9,10 +9,10 @@
   --accent: #e5e5e5;
   --text-muted: #666666;
 
-  --font-sans: 'Outfit', sans-serif;
+  --font-sans: 'Playfair Display', serif;
   --font-serif: 'Playfair Display', serif;
   --font-logo: 'Cinzel', serif;
-  --font-title: 'Montserrat', sans-serif;
+  --font-title: 'Playfair Display', serif;
   /* Fallback to sans for modern look */
 
   --transition-fast: 0.15s ease-out;
@@ -154,4 +154,17 @@ img {
 .btn-outline:hover {
   background-color: var(--foreground);
   color: var(--background);
+}
+
+@media (max-width: 768px) {
+
+  .btn-primary,
+  .btn-outline {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
