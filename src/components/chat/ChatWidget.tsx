@@ -38,7 +38,7 @@ export default function ChatWidget() {
             // Initial AI Greeting
             const welcomeMsg: Message = {
                 id: uuidv4(),
-                text: "Hello! Welcome to Atlas Urban Craft. How can I help you today?",
+                text: "Hi there! I'm Sara from Atlas Urban Craft. I can help you choose the perfect bag or decor piece 😊",
                 sender: 'ai',
                 timestamp: Date.now()
             };
@@ -117,8 +117,8 @@ export default function ChatWidget() {
                                 <div className={styles.onlineBadge}></div>
                             </div>
                             <div>
-                                <h3>Atlas Support</h3>
-                                <p>We typically reply instantly</p>
+                                <h3>Sara</h3>
+                                <p>Customer Success</p>
                             </div>
                         </div>
                         <button onClick={toggleChat} className={styles.closeBtn}>

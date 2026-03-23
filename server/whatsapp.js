@@ -2,7 +2,8 @@ const { makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBailey
 const pino = require('pino');
 const qrcode = require('qrcode-terminal');
 
-const ADMIN_NUMBER = process.env.ADMIN_WHATSAPP_NUMBER; // Format: 212708040530
+// Dynamic getter so it picks up late-loaded env vars
+const getAdminNumber = () => process.env.ADMIN_WHATSAPP_NUMBER;
 
 async function setupWhatsApp(io, ai) {
     const { state, saveCreds } = await useMultiFileAuthState('./.auth_info_baileys');
@@ -53,8 +54,8 @@ async function setupWhatsApp(io, ai) {
 
         // Check if message is from the ADMIN_NUMBER
         const senderJid = msg.key.remoteJid;
-        // Strip out non-numeric chars from env var
-        const cleanAdmin = ADMIN_NUMBER ? ADMIN_NUMBER.replace(/\D/g, '') : null;
+        const adminNumVal = getAdminNumber();
+        const cleanAdmin = adminNumVal ? adminNumVal.replace(/\D/g, '') : null;
         const normalizedAdminNumber = cleanAdmin ? `${cleanAdmin}@s.whatsapp.net` : null;
 
         if (normalizedAdminNumber && senderJid === normalizedAdminNumber) {
@@ -101,7 +102,8 @@ async function setupWhatsApp(io, ai) {
 
     return {
         sendMessageToAdmin: async (text) => {
-            const cleanAdmin = ADMIN_NUMBER ? ADMIN_NUMBER.replace(/\D/g, '') : null;
+            const adminNumVal = getAdminNumber();
+            const cleanAdmin = adminNumVal ? adminNumVal.replace(/\D/g, '') : null;
             const jid = cleanAdmin ? `${cleanAdmin}@s.whatsapp.net` : null;
             if (jid && sock) {
                 try {
