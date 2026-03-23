@@ -50,53 +50,45 @@ async function setupWhatsApp(io, ai) {
 
     sock.ev.on('messages.upsert', async (m) => {
         const msg = m.messages[0];
-        if (!msg.message || msg.key.fromMe) return;
+        if (!msg.message) return;
 
-        // Check if message is from the ADMIN_NUMBER
-        const senderJid = msg.key.remoteJid;
-        const adminNumVal = getAdminNumber();
-        const cleanAdmin = adminNumVal ? adminNumVal.replace(/\D/g, '') : null;
-        const normalizedAdminNumber = cleanAdmin ? `${cleanAdmin}@s.whatsapp.net` : null;
+        const textMsg = msg.message.conversation || msg.message.extendedTextMessage?.text;
+        if (!textMsg) return;
 
-        if (normalizedAdminNumber && senderJid === normalizedAdminNumber) {
-            const textMsg = msg.message.conversation || msg.message.extendedTextMessage?.text;
+        // Ignore messages sent BY the bot to prevent infinite echoing
+        if (textMsg.includes('💬 *New Website Chat*')) return;
 
-            if (textMsg) {
-                let sessionId = null;
-                let replyText = textMsg;
+        let sessionId = null;
+        let replyText = textMsg;
 
-                // Check if the admin included it in the message manually
-                const sessionMatch = textMsg.match(/\[Session:\s*([^\]]+)\]/);
+        // Check if the admin included it in the message manually
+        const sessionMatch = textMsg.match(/\[Session:\s*([^\]]+)\]/);
 
-                // Or check if admin replied to a quoted bot message
-                const quotedMessageInfo = msg.message.extendedTextMessage?.contextInfo?.quotedMessage;
-                const quotedText = quotedMessageInfo?.conversation || quotedMessageInfo?.extendedTextMessage?.text;
-                let quotedSessionMatch = null;
+        // Or check if admin replied to a quoted bot message
+        const quotedMessageInfo = msg.message.extendedTextMessage?.contextInfo?.quotedMessage;
+        const quotedText = quotedMessageInfo?.conversation || quotedMessageInfo?.extendedTextMessage?.text;
+        let quotedSessionMatch = null;
 
-                if (quotedText) {
-                    quotedSessionMatch = quotedText.match(/\[Session:\s*([^\]]+)\]/);
-                }
+        if (quotedText) {
+            quotedSessionMatch = quotedText.match(/\[Session:\s*([^\]]+)\]/);
+        }
 
-                if (sessionMatch) {
-                    sessionId = sessionMatch[1];
-                    // Clean the text to send to user
-                    replyText = textMsg.replace(/\[Session:\s*[^\]]+\]/, '').trim();
-                } else if (quotedSessionMatch) {
-                    sessionId = quotedSessionMatch[1];
-                }
+        if (sessionMatch) {
+            sessionId = sessionMatch[1];
+            // Clean the text to send to user
+            replyText = textMsg.replace(/\[Session:\s*[^\]]+\]/, '').trim();
+        } else if (quotedSessionMatch) {
+            sessionId = quotedSessionMatch[1];
+        }
 
-                if (sessionId && replyText) {
-                    console.log(`Routing Admin reply to web session ${sessionId}: ${replyText}`);
-                    // Emit event to the user's specific Socket.IO room
-                    io.to(sessionId).emit('receive_message', {
-                        text: replyText,
-                        sender: 'admin',
-                        timestamp: Date.now()
-                    });
-                } else {
-                    console.log(`⚠️ Received admin message but couldn't attach it to a web session. Make sure to reply to the bot's message directly.`);
-                }
-            }
+        if (sessionId && replyText) {
+            console.log(`Routing Admin reply to web session ${sessionId}: ${replyText}`);
+            // Emit event to the user's specific Socket.IO room
+            io.to(sessionId).emit('receive_message', {
+                text: replyText,
+                sender: 'admin',
+                timestamp: Date.now()
+            });
         }
     });
 
