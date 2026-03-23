@@ -6,18 +6,44 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
+const COUNTRIES = [
+    { code: 'US', name: 'United States' },
+    { code: 'CA', name: 'Canada' },
+    { code: 'GB', name: 'United Kingdom' },
+    { code: 'FR', name: 'France' },
+    { code: 'DE', name: 'Germany' },
+    { code: 'IT', name: 'Italy' },
+    { code: 'ES', name: 'Spain' },
+    { code: 'AU', name: 'Australia' },
+    { code: 'MA', name: 'Morocco' },
+    // Add more as needed
+];
+
 export default function CheckoutPage() {
     const { items, cartTotal } = useCart();
     const [isProcessing, setIsProcessing] = useState(false);
+    const [formData, setFormData] = useState({
+        email: '',
+        firstName: '',
+        lastName: '',
+        address: '',
+        city: '',
+        postalCode: '',
+        country: 'US'
+    });
     const router = useRouter();
 
     if (items.length === 0 && !isProcessing) {
-        // If cart is empty, redirect to cart page
         if (typeof window !== 'undefined') {
             router.push('/cart');
         }
         return null;
     }
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
     const handleStripePayment = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,7 +53,7 @@ export default function CheckoutPage() {
             const res = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ items }),
+                body: JSON.stringify({ items, customer: formData }),
             });
             const data = await res.json();
 
@@ -55,7 +81,16 @@ export default function CheckoutPage() {
                         <div className={styles.formGrid}>
                             <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                                 <label className={styles.label}>Email Address *</label>
-                                <input type="email" required className={styles.input} placeholder="john@example.com" />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    required
+                                    className={styles.input}
+                                    placeholder="john@example.com"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    autoComplete="email"
+                                />
                             </div>
                         </div>
                     </section>
@@ -63,29 +98,83 @@ export default function CheckoutPage() {
                     <section className={styles.formSection}>
                         <h2 className={styles.sectionTitle}>Shipping Address</h2>
                         <div className={styles.formGrid}>
+                            <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                                <label className={styles.label}>Country *</label>
+                                <select
+                                    name="country"
+                                    required
+                                    className={styles.input}
+                                    value={formData.country}
+                                    onChange={handleInputChange}
+                                    autoComplete="shipping country"
+                                >
+                                    {COUNTRIES.map(c => (
+                                        <option key={c.code} value={c.code}>{c.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>First Name *</label>
-                                <input type="text" required className={styles.input} />
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    required
+                                    className={styles.input}
+                                    value={formData.firstName}
+                                    onChange={handleInputChange}
+                                    autoComplete="given-name"
+                                />
                             </div>
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>Last Name *</label>
-                                <input type="text" required className={styles.input} />
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    required
+                                    className={styles.input}
+                                    value={formData.lastName}
+                                    onChange={handleInputChange}
+                                    autoComplete="family-name"
+                                />
                             </div>
+
                             <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                                 <label className={styles.label}>Address *</label>
-                                <input type="text" required className={styles.input} placeholder="Street Address or P.O. Box" />
+                                <input
+                                    type="text"
+                                    name="address"
+                                    required
+                                    className={styles.input}
+                                    placeholder="Street Address or P.O. Box"
+                                    value={formData.address}
+                                    onChange={handleInputChange}
+                                    autoComplete="shipping street-address"
+                                />
                             </div>
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>City *</label>
-                                <input type="text" required className={styles.input} />
+                                <input
+                                    type="text"
+                                    name="city"
+                                    required
+                                    className={styles.input}
+                                    value={formData.city}
+                                    onChange={handleInputChange}
+                                    autoComplete="shipping address-level2"
+                                />
                             </div>
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>Postal Code *</label>
-                                <input type="text" required className={styles.input} />
-                            </div>
-                            <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                                <label className={styles.label}>Country *</label>
-                                <input type="text" required className={styles.input} defaultValue="United States" />
+                                <input
+                                    type="text"
+                                    name="postalCode"
+                                    required
+                                    className={styles.input}
+                                    value={formData.postalCode}
+                                    onChange={handleInputChange}
+                                    autoComplete="shipping postal-code"
+                                />
                             </div>
                         </div>
                     </section>
