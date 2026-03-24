@@ -128,6 +128,21 @@ app.post('/chat/send', async (req, res) => {
     res.json({ success: true, aiReply });
 });
 
+// Contact Form Relay
+app.post('/contact/send', async (req, res) => {
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    console.log(`Contact Form: ${name} <${email}>`);
+
+    const adminLog = `📬 *New Contact Form Submission*\n\n👤 *Name*: ${name}\n📧 *Email*: ${email}\n\n💬 *Message*:\n${message}`;
+    await manager.broadcastToAdmins(adminLog);
+
+    res.json({ success: true });
+});
+
 io.on('connection', (socket) => {
     socket.on('register_session', (sessionId) => {
         if (sessionId) socket.join(sessionId);
