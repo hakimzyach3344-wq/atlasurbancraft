@@ -66,29 +66,39 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
             const textMsg = msg.message.conversation || msg.message.extendedTextMessage?.text;
             if (!textMsg) return;
 
-            if (textMsg.includes('💬 *New Website Chat*')) return;
+            // Don't process our own notification messages
+            if (textMsg.includes('ATLAS URBAN CRAFT')) return;
 
             let sessionId = null;
             let replyText = textMsg;
 
-            const sessionMatch = textMsg.match(/\[Session:\s*([^\]]+)\]/);
+            // Improved Regex to match both [Session: ID] and 🆔 *Session*: ID
+            const sessionRegex = /(?:🆔 \*Session\*:|\[Session:\s*)([a-f0-9-]+)/i;
+
+            const sessionMatch = textMsg.match(sessionRegex);
             const quotedMessageInfo = msg.message.extendedTextMessage?.contextInfo?.quotedMessage;
             const quotedText = quotedMessageInfo?.conversation || quotedMessageInfo?.extendedTextMessage?.text;
-            let quotedSessionMatch = quotedText ? quotedText.match(/\[Session:\s*([^\]]+)\]/) : null;
+
+            let quotedSessionMatch = quotedText ? quotedText.match(sessionRegex) : null;
 
             if (sessionMatch) {
                 sessionId = sessionMatch[1];
-                replyText = textMsg.replace(/\[Session:\s*[^\]]+\]/, '').trim();
+                // Clean up the reply text if they typed the session tag manually
+                replyText = textMsg.replace(sessionRegex, '').trim();
             } else if (quotedSessionMatch) {
                 sessionId = quotedSessionMatch[1];
             }
 
             if (sessionId && replyText) {
+                console.log(`Relaying message to Web Session [${sessionId}]: ${replyText.substring(0, 20)}...`);
                 io.to(sessionId).emit('receive_message', {
                     text: replyText,
                     sender: 'admin',
                     timestamp: Date.now()
                 });
+            } else if (!sessionId && !textMsg.includes('ATLAS URBAN CRAFT')) {
+                // Potential debug log for missed messages
+                // console.log("Missed message (no session ID):", textMsg.substring(0, 30));
             }
         });
     };
