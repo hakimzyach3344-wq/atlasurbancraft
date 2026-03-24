@@ -28,7 +28,9 @@ async function setupWhatsApp(io, ai) {
             console.log('📱 SCAN THIS QR CODE WITH YOUR WHATSAPP APP');
             console.log('    Settings -> Linked Devices -> Link a Device');
             console.log('========================================================\n');
-            qrcode.generate(qr, { small: true });
+            // Using default size (non-small) as it often renders better in cloud logs
+            // if you still have issues, zoom out your browser (Ctrl + -)
+            qrcode.generate(qr);
         }
 
         if (connection === 'close') {
