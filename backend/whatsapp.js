@@ -60,6 +60,7 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
         });
 
         sock.ev.on('messages.upsert', async (m) => {
+            console.log(`[WA DEBUG] messages.upsert event triggered. Count: ${m.messages.length}`);
             const msg = m.messages[0];
             if (!msg.message) return;
 
