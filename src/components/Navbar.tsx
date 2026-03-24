@@ -84,7 +84,7 @@ export default function Navbar({ megaMenuProducts = {} }: NavbarProps) {
             <div className={styles.stickyBox}>
                 <div className={styles.logoSection}>
                     <Link href="/" className={styles.logo}>
-                        <img src="/logo.jpeg" alt="Atlas Urban Craft Logo" className={styles.logoImage} />
+                        <img src="/logo.png" alt="Atlas Urban Craft Logo" className={styles.logoImage} />
                     </Link>
                 </div>
 

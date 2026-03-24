@@ -10,7 +10,7 @@ export default function Footer() {
                 <div className={styles.grid}>
                     <div className={styles.brand}>
                         <Link href="/">
-                            <img src="/logo.jpeg" alt="Atlas Urban Craft" className={styles.footerLogo} />
+                            <img src="/logo.png" alt="Atlas Urban Craft" className={styles.footerLogo} />
                         </Link>
                         <p className={styles.description} style={{ marginTop: '0.5rem', fontSize: '0.85rem' }}>
                             Meticulously handcrafted home decor and hardware from the heart of the Atlas Mountains, bringing artisanal heritage to modern living spaces.
