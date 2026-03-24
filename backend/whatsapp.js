@@ -20,17 +20,33 @@ async function setupWhatsApp(io, ai) {
 
     sock.ev.on('creds.update', saveCreds);
 
-    sock.ev.on('connection.update', (update) => {
+    sock.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect, qr } = update;
 
         if (qr) {
             console.log('\n========================================================');
-            console.log('📱 SCAN THIS QR CODE WITH YOUR WHATSAPP APP');
-            console.log('    Settings -> Linked Devices -> Link a Device');
+            console.log('📱 WHATSAPP PAIRING OPTIONS');
+            console.log('========================================================');
+
+            const adminNum = getAdminNumber();
+            if (adminNum) {
+                try {
+                    const code = await sock.requestPairingCode(adminNum.replace(/\D/g, ''));
+                    console.log(`\n👉 YOUR PAIRING CODE: ${code}`);
+                    console.log('\nHOW TO USE:');
+                    console.log('1. Open WhatsApp on your phone');
+                    console.log('2. Linked Devices -> Link a Device');
+                    console.log('3. Tap "Link with phone number instead" at the bottom');
+                    console.log(`4. Enter the code above: ${code}`);
+                } catch (err) {
+                    console.log('Failed to generate pairing code, falling back to QR.');
+                    qrcode.generate(qr);
+                }
+            } else {
+                console.log('Scanning QR instead (Add ADMIN_WHATSAPP_NUMBER for Pairing Code):');
+                qrcode.generate(qr);
+            }
             console.log('========================================================\n');
-            // Using default size (non-small) as it often renders better in cloud logs
-            // if you still have issues, zoom out your browser (Ctrl + -)
-            qrcode.generate(qr);
         }
 
         if (connection === 'close') {
