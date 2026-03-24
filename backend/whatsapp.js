@@ -74,7 +74,7 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
             let replyText = textMsg;
 
             // Improved Regex to match both [Session: ID] and 🆔 *Session*: ID
-            const sessionRegex = /(?:🆔 \*Session\*:|\[Session:\s*)([a-f0-9-]+)/i;
+            const sessionRegex = /(?:🆔 \*Session\*:\s*|\[Session:\s*)([a-f0-9-]+)/i;
 
             const sessionMatch = textMsg.match(sessionRegex);
             const contextInfo = msg.message.extendedTextMessage?.contextInfo;
@@ -105,6 +105,9 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
                 });
             } else if (!textMsg.includes('ATLAS URBAN CRAFT')) {
                 console.log(`[WA Relayer] No session ID found. Quoted: ${!!quotedText}`);
+                if (quotedText) {
+                    console.log(`[WA DEBUG] Quoted Text Content: "${quotedText.substring(0, 100)}..."`);
+                }
             }
         });
     };
