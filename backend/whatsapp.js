@@ -18,6 +18,7 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
         printQRInTerminal: false,
         syncFullHistory: false,
         shouldSyncHistoryMessage: () => false,
+        fireInitQueries: false,
         linkPreviewImageThumbnailWidth: 192
     });
 
