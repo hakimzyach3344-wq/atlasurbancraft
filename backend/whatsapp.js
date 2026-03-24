@@ -24,6 +24,7 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
             syncFullHistory: false,
             shouldSyncHistoryMessage: () => false,
             fireInitQueries: false,
+            markOnlineOnConnect: false,
             linkPreviewImageThumbnailWidth: 192
         });
 
@@ -32,10 +33,10 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
         sock.ev.on('connection.update', async (update) => {
             const { connection, lastDisconnect, qr } = update;
 
-            if (qr) {
+            if (qr && !isConnected) {
                 if (onQRUpdate) onQRUpdate(qr);
                 const adminNum = getAdminNumber();
-                if (adminNum) {
+                if (adminNum && !sock.authState.creds.me) {
                     try {
                         const code = await sock.requestPairingCode(adminNum.replace(/\D/g, ''));
                         console.log(`\n[${path.basename(authPath)}] Pairing Code: ${code}`);
