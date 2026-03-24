@@ -246,6 +246,7 @@ export default function Navbar({ megaMenuProducts = {} }: NavbarProps) {
                     <Link href="/blog" className={styles.navLink}>Blog</Link>
                     <Link href="/customization" className={styles.navLink}>Customization</Link>
                     <Link href="/trade-program" className={styles.navLink}>Trade Program</Link>
+                    <Link href="/wholesale" className={styles.navLink}>Wholesale</Link>
                     <Link href="/contact" className={styles.navLink}>Contact</Link>
                 </div>
             </nav>
@@ -290,6 +291,7 @@ export default function Navbar({ megaMenuProducts = {} }: NavbarProps) {
                     <Link href="/blog" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Blog</Link>
                     <Link href="/customization" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Customization</Link>
                     <Link href="/trade-program" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Trade Program</Link>
+                    <Link href="/wholesale" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Wholesale</Link>
                     <Link href="/contact" className={styles.mobileNavItem} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
                 </div>
 

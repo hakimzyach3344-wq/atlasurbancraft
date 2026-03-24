@@ -23,6 +23,7 @@ export default function Footer() {
                             <li><Link href="/reviews" className={styles.link}>Reviews</Link></li>
                             <li><Link href="/blog" className={styles.link}>Blog</Link></li>
                             <li><Link href="/customization" className={styles.link}>Customization</Link></li>
+                            <li><Link href="/wholesale" className={styles.link}>Wholesale</Link></li>
                         </ul>
                     </div>
 
