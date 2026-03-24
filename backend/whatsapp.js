@@ -102,6 +102,16 @@ async function setupWhatsApp(io, ai, onQRUpdate) {
     });
 
     return {
+        isConnected: () => sock && sock.user,
+        logout: async () => {
+            if (sock) {
+                try {
+                    await sock.logout();
+                } catch (err) {
+                    console.error("Logout error:", err);
+                }
+            }
+        },
         sendMessageToAdmin: async (text) => {
             const adminNumVal = getAdminNumber();
             const cleanAdmin = adminNumVal ? adminNumVal.replace(/\D/g, '') : null;
