@@ -46,7 +46,7 @@
 .tooltip {
     background-color: white;
     padding: 0.75rem 1rem;
-    border-radius: 12px;
+    border-radius: var(--radius);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 1rem;
     position: relative;
@@ -75,7 +75,7 @@
 .chatWindow {
     width: 350px;
     background: white;
-    border-radius: 16px;
+    border-radius: var(--radius);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     margin-bottom: 1rem;
     overflow: hidden;
@@ -208,7 +208,7 @@
 
 .messageBubble {
     padding: 0.75rem 1rem;
-    border-radius: 12px;
+    border-radius: var(--radius);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     position: relative;
 }
@@ -244,7 +244,7 @@
     color: white;
     border: none;
     padding: 0.6rem 1rem;
-    border-radius: 50px;
+    border-radius: var(--radius);
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -272,7 +272,7 @@
     border: none;
     background: #f4f4f4;
     padding: 0.6rem 1rem;
-    border-radius: 20px;
+    border-radius: var(--radius);
     font-size: 0.9rem;
     outline: none;
 }

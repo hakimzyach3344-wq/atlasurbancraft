@@ -21,6 +21,7 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
   --border: 1px solid var(--accent);
+  --radius: 8px;
 }
 
 * {
@@ -66,11 +67,12 @@ button {
   border: none;
   background: none;
   font-family: inherit;
+  border-radius: var(--radius);
 }
 
 /* Base Animations & Utilities */
 img {
-  border-radius: 12px;
+  border-radius: var(--radius);
 }
 
 .fade-in {
@@ -133,6 +135,7 @@ img {
   text-transform: uppercase;
   transition: all var(--transition-fast);
   border: 1px solid var(--primary);
+  border-radius: var(--radius);
 }
 
 .btn-primary:hover {
@@ -149,6 +152,7 @@ img {
   text-transform: uppercase;
   border: 1px solid var(--foreground);
   transition: all var(--transition-fast);
+  border-radius: var(--radius);
 }
 
 .btn-outline:hover {

@@ -9,7 +9,7 @@
     position: relative;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: var(--radius);
     background-color: #f7f7f7;
     margin-bottom: 1.25rem;
     display: flex;
@@ -86,7 +86,7 @@
     background-position: right;
     color: #ffffff;
     border: 1px solid var(--primary);
-    border-radius: 50px;
+    border-radius: var(--radius);
     padding: 0.85rem 1rem;
     font-family: var(--font-sans);
     font-size: 0.85rem;

@@ -21,7 +21,7 @@
     color: var(--primary);
     background: rgba(183, 134, 40, 0.08);
     padding: 0.4rem 1.2rem;
-    border-radius: 100px;
+    border-radius: var(--radius);
     margin-bottom: 1.5rem;
 }
 
@@ -91,7 +91,7 @@
 
 .featureCard {
     background: #fafaf8;
-    border-radius: 12px;
+    border-radius: var(--radius);
     padding: 2rem;
     text-align: center;
     border: 1px solid rgba(0, 0, 0, 0.04);
@@ -127,7 +127,7 @@
 /* Highlight Box */
 .highlightBox {
     background: linear-gradient(135deg, #faf6ed 0%, #f5f0e3 100%);
-    border-radius: 16px;
+    border-radius: var(--radius);
     padding: 2.5rem;
     margin: 2.5rem 0;
     border-left: 4px solid var(--primary);
@@ -144,7 +144,7 @@
 /* Review Card */
 .reviewCard {
     background: #fafaf8;
-    border-radius: 12px;
+    border-radius: var(--radius);
     padding: 2rem;
     margin-bottom: 1.5rem;
     border: 1px solid rgba(0, 0, 0, 0.04);
@@ -183,7 +183,7 @@
 
 .blogCard {
     background: #fafaf8;
-    border-radius: 12px;
+    border-radius: var(--radius);
     overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.04);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -301,7 +301,7 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     border: 1px solid #000000;
-    border-radius: 50px;
+    border-radius: var(--radius);
     cursor: pointer;
     text-decoration: none;
     transition: all 0.4s ease;

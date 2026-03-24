@@ -65,7 +65,7 @@
     font-weight: 600;
     letter-spacing: 0.2em;
     font-size: 0.9rem;
-    border-radius: 2px;
+    border-radius: var(--radius);
 }
 
 .faireSection {
@@ -132,6 +132,7 @@
     text-decoration: none;
     font-weight: 600;
     letter-spacing: 0.1em;
+    border-radius: var(--radius);
     transition: background 0.3s;
 }
 
@@ -144,6 +145,7 @@
     background: #fff;
     padding: 60px;
     border: 1px solid #ebebeb;
+    border-radius: var(--radius);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
 }
 
