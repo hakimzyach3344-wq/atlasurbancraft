@@ -35,6 +35,11 @@
     flex-direction: column;
 }
 
+.linksColumn {
+    display: flex;
+    flex-direction: column;
+}
+
 .footerLogo {
     height: 80px;
     width: auto;
