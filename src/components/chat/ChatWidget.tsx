@@ -17,6 +17,10 @@ export default function ChatWidget() {
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [sessionId, setSessionId] = useState('');
+    const [userName, setUserName] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    const [isIdentified, setIsIdentified] = useState(false);
+
     const socketRef = useRef<Socket | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -30,7 +34,16 @@ export default function ChatWidget() {
         }
         setSessionId(currentSessionId);
 
-        // 2. Load History
+        // 2. Load User Info
+        const savedName = localStorage.getItem('chat_user_name');
+        const savedEmail = localStorage.getItem('chat_user_email');
+        if (savedName && savedEmail) {
+            setUserName(savedName);
+            setUserEmail(savedEmail);
+            setIsIdentified(true);
+        }
+
+        // 3. Load History
         const savedMessages = localStorage.getItem('chat_messages');
         if (savedMessages) {
             setMessages(JSON.parse(savedMessages));
@@ -106,12 +119,23 @@ export default function ChatWidget() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     sessionId,
+                    userName,
+                    userEmail,
                     text: newMsg.text
                 })
             });
         } catch (error) {
             console.error("Failed to send message:", error);
             setIsTyping(false);
+        }
+    };
+
+    const handleIdentify = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (userName.trim() && userEmail.trim()) {
+            localStorage.setItem('chat_user_name', userName);
+            localStorage.setItem('chat_user_email', userEmail);
+            setIsIdentified(true);
         }
     };
 
@@ -139,45 +163,81 @@ export default function ChatWidget() {
                         </button>
                     </div>
 
-                    <div className={styles.messagesContainer}>
-                        {messages.map((msg) => (
-                            <div
-                                key={msg.id}
-                                className={`${styles.messageWrapper} ${msg.sender === 'user' ? styles.userMsg : styles.agentMsg}`}
-                            >
-                                <div className={styles.bubble}>
-                                    <p>{msg.text}</p>
-                                    <span className={styles.time}>
-                                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </span>
-                                </div>
+                    {!isIdentified ? (
+                        <div className={styles.identificationForm}>
+                            <div className={styles.formHeader}>
+                                <h3>Introduce Yourself</h3>
+                                <p>Please provide your details so we can assist you better.</p>
                             </div>
-                        ))}
-
-                        {isTyping && (
-                            <div className={`${styles.messageWrapper} ${styles.agentMsg}`}>
-                                <div className={styles.typingIndicator}>
-                                    <span></span><span></span><span></span>
+                            <form onSubmit={handleIdentify}>
+                                <div className={styles.inputBox}>
+                                    <label>Name or Business Name</label>
+                                    <input
+                                        type="text"
+                                        value={userName}
+                                        onChange={(e) => setUserName(e.target.value)}
+                                        placeholder="e.g. John Doe / Atlas Design"
+                                        required
+                                    />
                                 </div>
-                            </div>
-                        )}
-                        <div ref={messagesEndRef} />
-                    </div>
+                                <div className={styles.inputBox}>
+                                    <label>Email Address</label>
+                                    <input
+                                        type="email"
+                                        value={userEmail}
+                                        onChange={(e) => setUserEmail(e.target.value)}
+                                        placeholder="your@email.com"
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className={styles.identifyBtn}>
+                                    Start Chatting
+                                </button>
+                            </form>
+                        </div>
+                    ) : (
+                        <>
+                            <div className={styles.messagesContainer}>
+                                {messages.map((msg) => (
+                                    <div
+                                        key={msg.id}
+                                        className={`${styles.messageWrapper} ${msg.sender === 'user' ? styles.userMsg : styles.agentMsg}`}
+                                    >
+                                        <div className={styles.bubble}>
+                                            <p>{msg.text}</p>
+                                            <span className={styles.time}>
+                                                {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
 
-                    <form onSubmit={handleSend} className={styles.inputArea}>
-                        <input
-                            type="text"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder="Type a message..."
-                            className={styles.inputField}
-                        />
-                        <button type="submit" className={styles.sendBtn} disabled={!input.trim()}>
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                            </svg>
-                        </button>
-                    </form>
+                                {isTyping && (
+                                    <div className={`${styles.messageWrapper} ${styles.agentMsg}`}>
+                                        <div className={styles.typingIndicator}>
+                                            <span></span><span></span><span></span>
+                                        </div>
+                                    </div>
+                                )}
+                                <div ref={messagesEndRef} />
+                            </div>
+
+                            <form onSubmit={handleSend} className={styles.inputArea}>
+                                <input
+                                    type="text"
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    placeholder="Type a message..."
+                                    className={styles.inputField}
+                                />
+                                <button type="submit" className={styles.sendBtn} disabled={!input.trim()}>
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </>
+                    )}
                 </div>
             )}
 

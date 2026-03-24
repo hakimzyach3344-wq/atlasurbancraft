@@ -100,10 +100,10 @@ app.post('/toggle-ai', (req, res) => {
 
 // REST API to send a message
 app.post('/chat/send', async (req, res) => {
-    const { sessionId, text } = req.body;
+    const { sessionId, text, userName, userEmail } = req.body;
     if (!sessionId || !text) return res.status(400).json({ error: 'Missing data' });
 
-    console.log(`User message [${sessionId}]: ${text}`);
+    console.log(`User message [${sessionId}] from ${userName || 'Anonymous'}: ${text}`);
 
     let aiReply = null;
     if (isAIEnabled) {
@@ -121,8 +121,20 @@ app.post('/chat/send', async (req, res) => {
         }
     }
 
-    // Broadcast to ALL active sessions
-    const adminLog = `💬 *New Website Chat*\n[Session: ${sessionId}]\n\n*User*: ${text}${aiReply ? `\n*AI*: ${aiReply}` : (isAIEnabled ? '\n*AI*: _(Error: AI failed)_' : '\n*AI*: _(Disabled)_')}`;
+    // Professional WhatsApp Message Format
+    const adminLog = `💬 *ATLAS URBAN CRAFT - New Chat*
+━━━━━━━━━━━━━━━━━━━━━
+👤 *Client*: ${userName || 'Unknown'}
+📧 *Email*: ${userEmail || 'Not provided'}
+🆔 *Session*: ${sessionId}
+━━━━━━━━━━━━━━━━━━━━━
+💬 *Message*:
+${text}
+
+${aiReply ? `🤖 *AI Response*: \n${aiReply}` : (isAIEnabled ? '🤖 *AI status*: _AI failed to respond_' : '🤖 *AI status*: _AI Disabled_')}
+━━━━━━━━━━━━━━━━━━━━━
+_Reply to this message to continue the chat._`;
+
     await manager.broadcastToAdmins(adminLog);
 
     res.json({ success: true, aiReply });
@@ -137,7 +149,16 @@ app.post('/contact/send', async (req, res) => {
 
     console.log(`Contact Form: ${name} <${email}>`);
 
-    const adminLog = `📬 *New Contact Form Submission*\n\n👤 *Name*: ${name}\n📧 *Email*: ${email}\n\n💬 *Message*:\n${message}`;
+    const adminLog = `📬 *ATLAS URBAN CRAFT - Contact Form*
+━━━━━━━━━━━━━━━━━━━━━
+👤 *Client*: ${name}
+📧 *Email*: ${email}
+━━━━━━━━━━━━━━━━━━━━━
+💬 *Message*:
+${message}
+━━━━━━━━━━━━━━━━━━━━━
+_Reply directly via email to the client._`;
+
     await manager.broadcastToAdmins(adminLog);
 
     res.json({ success: true });
