@@ -88,12 +88,24 @@ app.post('/chat/send', async (req, res) => {
     if (!sessionId || !text) return res.status(400).json({ error: 'Missing data' });
 
     console.log(`User message [${sessionId}]: ${text}`);
-    const aiReply = await ai.generateReply(text);
 
-    io.to(sessionId).emit('receive_message', { text: aiReply, sender: 'ai', timestamp: Date.now() });
+    let aiReply = null;
+    try {
+        aiReply = await ai.generateReply(text);
+        if (aiReply) {
+            io.to(sessionId).emit('receive_message', {
+                text: aiReply,
+                sender: 'ai',
+                timestamp: Date.now()
+            });
+        }
+    } catch (err) {
+        console.error("AI Generation Error:", err.message);
+        // We continue so the message still reaches WhatsApp
+    }
 
     // Broadcast to ALL active sessions
-    const adminLog = `💬 *New Website Chat*\n[Session: ${sessionId}]\n\n*User*: ${text}\n*AI*: ${aiReply}`;
+    const adminLog = `💬 *New Website Chat*\n[Session: ${sessionId}]\n\n*User*: ${text}${aiReply ? `\n*AI*: ${aiReply}` : '\n*AI*: _(Error: AI not responding, please reply manually)_'}`;
     await manager.broadcastToAdmins(adminLog);
 
     res.json({ success: true, aiReply });
