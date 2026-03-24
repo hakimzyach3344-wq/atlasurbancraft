@@ -15,7 +15,10 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
         auth: state,
         logger: logger,
         browser: Browsers.macOS('Desktop'),
-        printQRInTerminal: false
+        printQRInTerminal: false,
+        syncFullHistory: false,
+        shouldSyncHistoryMessage: () => false,
+        linkPreviewImageThumbnailWidth: 192
     });
 
     sock.ev.on('creds.update', saveCreds);
