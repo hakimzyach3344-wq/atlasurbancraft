@@ -33,11 +33,12 @@ async function setupWhatsApp(io, ai) {
                 try {
                     const code = await sock.requestPairingCode(adminNum.replace(/\D/g, ''));
                     console.log(`\n👉 YOUR PAIRING CODE: ${code}`);
+                    console.log(`📱 TARGET PHONE NUMBER: ${adminNum}`);
                     console.log('\nHOW TO USE:');
                     console.log('1. Open WhatsApp on your phone');
                     console.log('2. Linked Devices -> Link a Device');
                     console.log('3. Tap "Link with phone number instead" at the bottom');
-                    console.log(`4. Enter the code above: ${code}`);
+                    console.log(`4. Enter '${adminNum}' then enter the code: ${code}`);
                 } catch (err) {
                     console.log('Failed to generate pairing code, falling back to QR.');
                     qrcode.generate(qr);
