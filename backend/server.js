@@ -17,13 +17,24 @@ const io = new Server(server, { cors: { origin: "*" } });
 
 const ai = setupAI();
 const manager = new SessionManager(io, ai);
+let isAIEnabled = true;
 
 // DASHBOARD
 app.get('/', (req, res) => {
     const sessions = manager.getAllSessions();
     res.send(`
         <div style="max-width: 800px; margin: 40px auto; font-family: sans-serif; background: #f9f9f9; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h1 style="border-bottom: 2px solid #333; padding-bottom: 10px;">WhatsApp Admin Dashboard</h1>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
+                <h1 style="margin: 0;">WhatsApp Admin Dashboard</h1>
+                <div style="display: flex; align-items: center; gap: 10px; background: ${isAIEnabled ? '#e8f5e9' : '#ffebee'}; padding: 5px 15px; border-radius: 20px; border: 1px solid ${isAIEnabled ? '#2e7d32' : '#c62828'};">
+                    <span style="font-weight: bold; color: ${isAIEnabled ? '#1b5e20' : '#b71c1c'};">AI Status: ${isAIEnabled ? 'ON' : 'OFF'}</span>
+                    <form action="/toggle-ai" method="POST" style="margin: 0;">
+                        <button type="submit" style="background: ${isAIEnabled ? '#b71c1c' : '#1b5e20'}; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px;">
+                            ${isAIEnabled ? 'Disable' : 'Enable'}
+                        </button>
+                    </form>
+                </div>
+            </div>
             
             <div style="margin: 20px 0;">
                 <form action="/sessions/add" method="POST">
@@ -82,6 +93,11 @@ app.get('/logout/:id', async (req, res) => {
     res.redirect('/');
 });
 
+app.post('/toggle-ai', (req, res) => {
+    isAIEnabled = !isAIEnabled;
+    res.redirect('/');
+});
+
 // REST API to send a message
 app.post('/chat/send', async (req, res) => {
     const { sessionId, text } = req.body;
@@ -90,22 +106,23 @@ app.post('/chat/send', async (req, res) => {
     console.log(`User message [${sessionId}]: ${text}`);
 
     let aiReply = null;
-    try {
-        aiReply = await ai.generateReply(text);
-        if (aiReply) {
-            io.to(sessionId).emit('receive_message', {
-                text: aiReply,
-                sender: 'ai',
-                timestamp: Date.now()
-            });
+    if (isAIEnabled) {
+        try {
+            aiReply = await ai.generateReply(text);
+            if (aiReply) {
+                io.to(sessionId).emit('receive_message', {
+                    text: aiReply,
+                    sender: 'ai',
+                    timestamp: Date.now()
+                });
+            }
+        } catch (err) {
+            console.error("AI Generation Error:", err.message);
         }
-    } catch (err) {
-        console.error("AI Generation Error:", err.message);
-        // We continue so the message still reaches WhatsApp
     }
 
     // Broadcast to ALL active sessions
-    const adminLog = `💬 *New Website Chat*\n[Session: ${sessionId}]\n\n*User*: ${text}${aiReply ? `\n*AI*: ${aiReply}` : '\n*AI*: _(Error: AI not responding, please reply manually)_'}`;
+    const adminLog = `💬 *New Website Chat*\n[Session: ${sessionId}]\n\n*User*: ${text}${aiReply ? `\n*AI*: ${aiReply}` : (isAIEnabled ? '\n*AI*: _(Error: AI failed)_' : '\n*AI*: _(Disabled)_')}`;
     await manager.broadcastToAdmins(adminLog);
 
     res.json({ success: true, aiReply });
