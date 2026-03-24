@@ -105,6 +105,9 @@
         min-height: 40px;
     }
 
+    .heroContent {
+        padding: 0 1rem;
+    }
 }
 
 .heroBtn {

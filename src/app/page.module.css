@@ -161,6 +161,8 @@
     .pillarsSection {
         grid-template-columns: 1fr;
         gap: 4rem;
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 
