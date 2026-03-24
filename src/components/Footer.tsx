@@ -9,7 +9,9 @@ export default function Footer() {
             <div className={`container ${styles.container}`}>
                 <div className={styles.grid}>
                     <div className={styles.brand}>
-                        <h2 className={styles.logo}>ATLAS URBAN CRAFT</h2>
+                        <Link href="/">
+                            <img src="/logo.jpeg" alt="Atlas Urban Craft" className={styles.footerLogo} />
+                        </Link>
                         <p className={styles.description} style={{ marginTop: '0.5rem', fontSize: '0.85rem' }}>
                             Meticulously handcrafted home decor and hardware from the heart of the Atlas Mountains, bringing artisanal heritage to modern living spaces.
                         </p>
@@ -23,7 +25,7 @@ export default function Footer() {
                             <li><Link href="/reviews" className={styles.link}>Reviews</Link></li>
                             <li><Link href="/blog" className={styles.link}>Blog</Link></li>
                             <li><Link href="/customization" className={styles.link}>Customization</Link></li>
-                            <li><Link href="/wholesale" className={styles.link}>Wholesale</Link></li>
+                            <li><Link href="/wholesale" className={styles.link}>Wholesale Program</Link></li>
                         </ul>
                     </div>
 

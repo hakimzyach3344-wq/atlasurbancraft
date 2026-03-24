@@ -29,13 +29,16 @@
 }
 
 .logo {
-    font-family: var(--font-logo);
-    font-size: 2.2rem;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    color: var(--primary);
-    text-align: center;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logoImage {
+    height: 100px;
+    width: auto;
+    max-height: 120px;
+    object-fit: contain;
 }
 
 .topSection {
@@ -289,6 +292,21 @@
 
 .navLink:hover {
     color: var(--primary);
+}
+
+.wholesaleBtn {
+    background-color: var(--primary);
+    color: white !important;
+    padding: 0.5rem 1.2rem !important;
+    border-radius: 4px;
+    font-size: 0.85rem !important;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.wholesaleBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    color: white !important;
 }
 
 .navChevron {

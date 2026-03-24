@@ -52,7 +52,7 @@ export default function WholesalePage() {
                             </div>
                         </div>
                         <div className={styles.faireLogoBox}>
-                            <img src="https://images.faire.com/static/faire-logo-black.svg" alt="Faire Logo" className={styles.faireLogo} />
+                            <img src="https://layoffstracker.com/wp-content/uploads/2023/11/Faire_layoffs.jpg" alt="Faire Logo" className={styles.faireLogo} />
                             <p className={styles.faireTagline}>Our Official Wholesale Partner</p>
                         </div>
                     </div>
