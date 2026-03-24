@@ -10,6 +10,7 @@ const setupAI = require('./ai');
 const app = express();
 app.use(cors({ origin: "*" }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const server = createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
