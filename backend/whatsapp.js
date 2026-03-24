@@ -40,7 +40,9 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
                     try {
                         const code = await sock.requestPairingCode(adminNum.replace(/\D/g, ''));
                         console.log(`\n[${path.basename(authPath)}] Pairing Code: ${code}`);
-                    } catch (err) { }
+                    } catch (err) {
+                        console.error(`Failed to request pairing code for ${adminNum}:`, err.message);
+                    }
                 }
             }
 
