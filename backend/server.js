@@ -18,10 +18,32 @@ const io = new Server(server, {
 
 const ai = setupAI();
 let wa;
+let currentQR = null;
 
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.send('Backend is running!');
+});
+
+// Route to view the QR code clearly
+const QRCode = require('qrcode');
+app.get('/qr', async (req, res) => {
+    if (!currentQR) {
+        return res.send('<h1>WhatsApp is already connected or QR is not ready yet.</h1><p>Please check Railway Logs or refresh in a moment.</p>');
+    }
+
+    try {
+        const qrImage = await QRCode.toDataURL(currentQR);
+        res.send(`
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif;">
+                <h1>Scan this QR Code</h1>
+                <img src="${qrImage}" style="border: 20px solid white; box-shadow: 0 0 20px rgba(0,0,0,0.1); width: 300px;" />
+                <p>Refresh this page if the code expires.</p>
+            </div>
+        `);
+    } catch (err) {
+        res.status(500).send('Failed to generate QR image.');
+    }
 });
 
 // REST API to send a message
@@ -72,7 +94,15 @@ const PORT = process.env.PORT || 3001;
 server.listen(PORT, async () => {
     console.log(`Backend server listening on port ${PORT}`);
     try {
-        wa = await setupWhatsApp(io, ai);
+        wa = await setupWhatsApp(io, ai, (qr) => {
+            currentQR = qr;
+        });
+
+        // Clear QR when connected
+        io.on('connection', (socket) => {
+            if (wa && wa.isConnected) currentQR = null;
+        });
+
     } catch (err) {
         console.error("Failed to setup WhatsApp:", err);
     }

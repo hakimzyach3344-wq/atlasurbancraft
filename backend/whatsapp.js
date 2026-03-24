@@ -4,7 +4,7 @@ const qrcode = require('qrcode-terminal');
 
 const getAdminNumber = () => process.env.ADMIN_WHATSAPP_NUMBER;
 
-async function setupWhatsApp(io, ai) {
+async function setupWhatsApp(io, ai, onQRUpdate) {
     const { state, saveCreds } = await useMultiFileAuthState('./.auth_info_baileys');
     const logger = pino({ level: 'error' });
 
@@ -24,6 +24,7 @@ async function setupWhatsApp(io, ai) {
         const { connection, lastDisconnect, qr } = update;
 
         if (qr) {
+            if (onQRUpdate) onQRUpdate(qr);
             console.log('\n========================================================');
             console.log('📱 WHATSAPP PAIRING OPTIONS');
             console.log('========================================================');
@@ -56,10 +57,11 @@ async function setupWhatsApp(io, ai) {
             console.log('Reconnecting:', shouldReconnect);
 
             if (shouldReconnect) {
-                setTimeout(() => setupWhatsApp(io, ai), 3000);
+                setTimeout(() => setupWhatsApp(io, ai, onQRUpdate), 3000);
             }
         } else if (connection === 'open') {
             console.log('✅ WhatsApp successfully connected!');
+            if (onQRUpdate) onQRUpdate(null);
         }
     });
 
