@@ -66,8 +66,8 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
             const textMsg = msg.message.conversation || msg.message.extendedTextMessage?.text;
             if (!textMsg) return;
 
-            // Don't process our own notification messages
-            if (textMsg.includes('ATLAS URBAN CRAFT')) return;
+            // Don't process our own notification messages (avoid loops)
+            if (textMsg.includes('ATLAS URBAN CRAFT') && msg.key.fromMe) return;
 
             let sessionId = null;
             let replyText = textMsg;
@@ -76,8 +76,14 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
             const sessionRegex = /(?:🆔 \*Session\*:|\[Session:\s*)([a-f0-9-]+)/i;
 
             const sessionMatch = textMsg.match(sessionRegex);
-            const quotedMessageInfo = msg.message.extendedTextMessage?.contextInfo?.quotedMessage;
-            const quotedText = quotedMessageInfo?.conversation || quotedMessageInfo?.extendedTextMessage?.text;
+            const contextInfo = msg.message.extendedTextMessage?.contextInfo;
+            const quotedMsg = contextInfo?.quotedMessage;
+
+            // Extract text from various quoted message types
+            const quotedText = quotedMsg?.conversation ||
+                quotedMsg?.extendedTextMessage?.text ||
+                quotedMsg?.buttonsMessage?.contentText ||
+                quotedMsg?.templateSecondaryHtmlMessage?.contentText;
 
             let quotedSessionMatch = quotedText ? quotedText.match(sessionRegex) : null;
 
@@ -90,15 +96,14 @@ async function setupWhatsApp(io, ai, authPath, onQRUpdate) {
             }
 
             if (sessionId && replyText) {
-                console.log(`Relaying message to Web Session [${sessionId}]: ${replyText.substring(0, 20)}...`);
+                console.log(`[WA Relayer] Relaying to [${sessionId}]: ${replyText.substring(0, 30)}`);
                 io.to(sessionId).emit('receive_message', {
                     text: replyText,
                     sender: 'admin',
                     timestamp: Date.now()
                 });
-            } else if (!sessionId && !textMsg.includes('ATLAS URBAN CRAFT')) {
-                // Potential debug log for missed messages
-                // console.log("Missed message (no session ID):", textMsg.substring(0, 30));
+            } else if (!textMsg.includes('ATLAS URBAN CRAFT')) {
+                console.log(`[WA Relayer] No session ID found. Quoted: ${!!quotedText}`);
             }
         });
     };
