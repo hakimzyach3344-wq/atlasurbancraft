@@ -11,11 +11,13 @@ class SessionManager {
         // Use WA_AUTH_PATH from env, or default to local 'auth' folder
         // On Railway, this can be pointed to a Volume mount point like /app/backend/auth
         const customPath = process.env.WA_AUTH_PATH;
-        this.baseAuthDir = customPath ? path.resolve(customPath) : path.join(__dirname, 'auth');
+        this.baseAuthDir = customPath ? (path.isAbsolute(customPath) ? customPath : path.resolve(customPath)) : path.join(__dirname, 'auth');
 
         if (!fs.existsSync(this.baseAuthDir)) {
-            console.log(`Creating auth directory at: ${this.baseAuthDir}`);
+            console.log(`[SessionManager] Creating auth directory at: ${this.baseAuthDir}`);
             fs.mkdirSync(this.baseAuthDir, { recursive: true });
+        } else {
+            console.log(`[SessionManager] Using existing auth directory at: ${this.baseAuthDir}`);
         }
     }
 
