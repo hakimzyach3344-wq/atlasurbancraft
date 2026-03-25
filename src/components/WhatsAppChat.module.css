@@ -43,6 +43,59 @@
     height: 100%;
 }
 
+.helpPopup {
+    background-color: #000;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    position: relative;
+    max-width: 200px;
+    animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1002;
+    text-align: center;
+}
+
+.helpPopup p {
+    font-size: 0.85rem;
+    margin: 0;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.helpArrow {
+    position: absolute;
+    bottom: -8px;
+    right: 24px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #000;
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(20px);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05) translateY(-5px);
+    }
+
+    70% {
+        transform: scale(0.9) translateY(2px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
 .tooltip {
     background-color: white;
     padding: 0.75rem 1rem;

@@ -8,13 +8,34 @@ const WHATSAPP_NUMBER = "+212708040530"; // Replace with actual number or allow 
 export default function WhatsAppChat() {
     const [isOpen, setIsOpen] = useState(false);
     const [showTooltip, setShowTooltip] = useState(false);
+    const [showHelpPopup, setShowHelpPopup] = useState(false);
+    const [isHelpDisabled, setIsHelpDisabled] = useState(false);
     const [messages, setMessages] = useState<any[]>([]);
     const [userInput, setUserInput] = useState("");
 
     useEffect(() => {
-        const timer = setTimeout(() => setShowTooltip(true), 3000);
-        return () => clearTimeout(timer);
-    }, []);
+        const disabled = localStorage.getItem('whatsapp_help_disabled') === 'true';
+        setIsHelpDisabled(disabled);
+
+        if (!disabled) {
+            // Initial showing after 10 seconds
+            const initialTimer = setTimeout(() => {
+                setShowHelpPopup(true);
+                setTimeout(() => setShowHelpPopup(false), 4000);
+            }, 10000);
+
+            // Repeat every 7 minutes
+            const interval = setInterval(() => {
+                setShowHelpPopup(true);
+                setTimeout(() => setShowHelpPopup(false), 4000);
+            }, 7 * 60 * 1000);
+
+            return () => {
+                clearTimeout(initialTimer);
+                clearInterval(interval);
+            };
+        }
+    }, [isHelpDisabled]);
 
     const sendMessage = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -39,6 +60,11 @@ export default function WhatsAppChat() {
     const toggleChat = () => {
         setIsOpen(!isOpen);
         setShowTooltip(false);
+        setShowHelpPopup(false);
+        if (!isHelpDisabled) {
+            localStorage.setItem('whatsapp_help_disabled', 'true');
+            setIsHelpDisabled(true);
+        }
     };
 
     const handleWhatsAppRedirect = () => {
@@ -48,6 +74,14 @@ export default function WhatsAppChat() {
 
     return (
         <div className={styles.widgetContainer}>
+            {/* Help Popup */}
+            {showHelpPopup && !isOpen && (
+                <div className={styles.helpPopup}>
+                    <p>if you need help 3 agents online now</p>
+                    <div className={styles.helpArrow}></div>
+                </div>
+            )}
+
             {/* Tooltip Message */}
             {showTooltip && !isOpen && (
                 <div className={styles.tooltip}>

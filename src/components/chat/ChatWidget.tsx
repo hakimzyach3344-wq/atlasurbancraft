@@ -20,6 +20,8 @@ export default function ChatWidget() {
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [isIdentified, setIsIdentified] = useState(false);
+    const [showHelpPopup, setShowHelpPopup] = useState(false);
+    const [isHelpDisabled, setIsHelpDisabled] = useState(false);
 
     const socketRef = useRef<Socket | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -59,13 +61,37 @@ export default function ChatWidget() {
             localStorage.setItem('chat_messages', JSON.stringify([welcomeMsg]));
         }
 
+        const disabled = localStorage.getItem('chat_help_disabled') === 'true';
+        setIsHelpDisabled(disabled);
+
+        if (!disabled) {
+            // Initial showing after 10 seconds
+            const initialTimer = setTimeout(() => {
+                setShowHelpPopup(true);
+                setTimeout(() => setShowHelpPopup(false), 4000);
+            }, 10000);
+
+            // Repeat every 7 minutes
+            const interval = setInterval(() => {
+                setShowHelpPopup(true);
+                setTimeout(() => setShowHelpPopup(false), 4000);
+            }, 7 * 60 * 1000);
+
+            return () => {
+                clearTimeout(initialTimer);
+                clearInterval(interval);
+            };
+        }
+    }, [isHelpDisabled]);
+
+    useEffect(() => {
         // 3. Connect Socket.IO to external backend
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
         socketRef.current = io(backendUrl);
 
         socketRef.current.on('connect', () => {
             console.log("Connected to remote chat server");
-            socketRef.current?.emit('register_session', currentSessionId);
+            socketRef.current?.emit('register_session', sessionId || uuidv4());
         });
 
         socketRef.current.on('receive_message', (msg: Omit<Message, 'id'>) => {
@@ -85,7 +111,7 @@ export default function ChatWidget() {
         return () => {
             socketRef.current?.disconnect();
         };
-    }, []);
+    }, [sessionId]);
 
     // Auto-scroll
     useEffect(() => {
@@ -139,10 +165,24 @@ export default function ChatWidget() {
         }
     };
 
-    const toggleChat = () => setIsOpen(!isOpen);
+    const toggleChat = () => {
+        setIsOpen(!isOpen);
+        setShowHelpPopup(false);
+        if (!isHelpDisabled) {
+            localStorage.setItem('chat_help_disabled', 'true');
+            setIsHelpDisabled(true);
+        }
+    };
 
     return (
         <div className={styles.widgetContainer}>
+            {/* Help Popup */}
+            {showHelpPopup && !isOpen && (
+                <div className={styles.helpPopup}>
+                    <p>if you need help 3 agents online now</p>
+                    <div className={styles.helpArrow}></div>
+                </div>
+            )}
             {/* Chat Window */}
             {isOpen && (
                 <div className={`${styles.chatWindow} slide-up`}>
