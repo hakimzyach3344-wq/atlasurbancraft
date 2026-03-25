@@ -81,6 +81,10 @@ export default function ProductCard({ product, index }: { product: Product; inde
                         {product.name}
                     </Link>
                 </h3>
+                <div className={styles.productReviews}>
+                    <span className={styles.stars}>★★★★★</span>
+                    <span className={styles.reviewText}>5.0 / 5</span>
+                </div>
                 <div className={styles.productPriceWrapper}>
                     <span className={styles.priceFrom}>From</span>
                     <span className={styles.productPrice}>${product.price.toFixed(2)}</span>

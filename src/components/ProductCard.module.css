@@ -163,6 +163,25 @@
     text-decoration: underline;
 }
 
+.productReviews {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.stars {
+    color: #ffb400;
+    /* Gold */
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.reviewText {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
 .productPriceWrapper {
     display: flex;
     align-items: baseline;

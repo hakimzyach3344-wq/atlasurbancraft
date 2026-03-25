@@ -22,11 +22,13 @@
 
 /* --- CONTAINER --- */
 .ia-editorial-viewport {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 1rem;
+    width: 100vw;
     position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    overflow: hidden;
 }
 
 /* --- TRACK --- */

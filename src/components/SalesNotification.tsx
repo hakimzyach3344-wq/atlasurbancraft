@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import productsData from '../data/products.json';
 import styles from './SalesNotification.module.css';
 
@@ -21,6 +22,29 @@ const NAMES = [
 export default function SalesNotification() {
     const [currentSale, setCurrentSale] = useState<any>(null);
     const [isVisible, setIsVisible] = useState(false);
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+    const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+    // Minimum swipe distance in pixels
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e: React.TouchEvent) => {
+        setTouchEnd(null);
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const onTouchMove = (e: React.TouchEvent) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isSwipe = Math.abs(distance) > minSwipeDistance;
+        if (isSwipe) {
+            setIsVisible(false);
+        }
+    };
 
     useEffect(() => {
         // Initial delay before first notification
@@ -70,28 +94,35 @@ export default function SalesNotification() {
     if (!currentSale) return null;
 
     return (
-        <div className={`${styles.notification} ${isVisible ? styles.visible : ''}`}>
-            <div className={styles.content}>
-                <div className={styles.imageWrapper}>
-                    <Image
-                        src={currentSale.product.image}
-                        alt={currentSale.product.name}
-                        width={60}
-                        height={60}
-                        className={styles.productImage}
-                    />
+        <div
+            className={`${styles.notification} ${isVisible ? styles.visible : ''}`}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+        >
+            <Link href={`/product/${currentSale.product.id}`} className={styles.linkWrapper}>
+                <div className={styles.content}>
+                    <div className={styles.imageWrapper}>
+                        <Image
+                            src={currentSale.product.image}
+                            alt={currentSale.product.name}
+                            width={60}
+                            height={60}
+                            className={styles.productImage}
+                        />
+                    </div>
+                    <div className={styles.text}>
+                        <p className={styles.title}>
+                            <span className={styles.name}>{currentSale.name}</span> in <span className={styles.location}>{currentSale.location}</span>
+                        </p>
+                        <p className={styles.description}>
+                            Purchased <strong>{currentSale.product.name.substring(0, 40)}{currentSale.product.name.length > 40 ? '...' : ''}</strong>
+                        </p>
+                        <p className={styles.timestamp}>{currentSale.time}</p>
+                    </div>
                 </div>
-                <div className={styles.text}>
-                    <p className={styles.title}>
-                        <span className={styles.name}>{currentSale.name}</span> in <span className={styles.location}>{currentSale.location}</span>
-                    </p>
-                    <p className={styles.description}>
-                        Purchased <strong>{currentSale.product.name.substring(0, 40)}{currentSale.product.name.length > 40 ? '...' : ''}</strong>
-                    </p>
-                    <p className={styles.timestamp}>{currentSale.time}</p>
-                </div>
-                <button className={styles.closeBtn} onClick={() => setIsVisible(false)}>×</button>
-            </div>
+            </Link>
+            <button className={styles.closeBtn} onClick={() => setIsVisible(false)}>×</button>
             <div className={styles.progressBar}></div>
         </div>
     );

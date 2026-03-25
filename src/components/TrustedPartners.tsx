@@ -63,6 +63,34 @@ export default function TrustedPartners() {
         track.addEventListener('touchstart', handleTouchStart, { passive: true });
         track.addEventListener('touchend', handleTouchEnd, { passive: true });
 
+        // Mouse Drag Support
+        let isDragging = false;
+        let startX = 0;
+        let scrollLeft = 0;
+
+        const handleMouseDown = (e: MouseEvent) => {
+            isDragging = true;
+            startX = e.pageX;
+            clearInterval(autoScroll);
+        };
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!isDragging) return;
+            e.preventDefault();
+        };
+
+        const handleMouseUp = (e: MouseEvent) => {
+            if (!isDragging) return;
+            isDragging = false;
+            const endX = e.pageX;
+            if (startX - endX > 50) moveNext();
+            autoScroll = setInterval(moveNext, intervalSpeed);
+        };
+
+        track.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+
         return () => {
             clearInterval(autoScroll);
             if (track) {
@@ -70,7 +98,10 @@ export default function TrustedPartners() {
                 track.removeEventListener('mouseleave', handleMouseLeave);
                 track.removeEventListener('touchstart', handleTouchStart);
                 track.removeEventListener('touchend', handleTouchEnd);
+                track.removeEventListener('mousedown', handleMouseDown);
             }
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
         };
     }, []);
 
