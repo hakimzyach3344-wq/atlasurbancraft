@@ -10,17 +10,18 @@
 }
 
 .helpPopup {
-    background-color: #000;
-    color: white;
+    background-color: #fff;
+    color: #000;
     padding: 0.75rem 1rem;
     border-radius: 12px;
     margin-bottom: 1rem;
     position: relative;
-    max-width: 200px;
+    max-width: 220px;
     animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     z-index: 1002;
     text-align: center;
+    border: 1px solid #eee;
 }
 
 .helpPopup p {
@@ -38,7 +39,7 @@
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-top: 8px solid #000;
+    border-top: 8px solid #fff;
 }
 
 @keyframes bounceIn {
@@ -80,6 +81,11 @@
 .floatingBtn:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.floatingBtn svg {
+    width: 28px;
+    height: 28px;
 }
 
 .chatWindow {

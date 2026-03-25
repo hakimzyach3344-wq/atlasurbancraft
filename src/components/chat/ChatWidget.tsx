@@ -21,7 +21,12 @@ export default function ChatWidget() {
     const [userEmail, setUserEmail] = useState('');
     const [isIdentified, setIsIdentified] = useState(false);
     const [showHelpPopup, setShowHelpPopup] = useState(false);
-    const [isHelpDisabled, setIsHelpDisabled] = useState(false);
+    const [isHelpDisabled, setIsHelpDisabled] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('chat_help_disabled') === 'true';
+        }
+        return false;
+    });
 
     const socketRef = useRef<Socket | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -60,22 +65,19 @@ export default function ChatWidget() {
             setMessages([welcomeMsg]);
             localStorage.setItem('chat_messages', JSON.stringify([welcomeMsg]));
         }
+    }, []);
 
-        const disabled = localStorage.getItem('chat_help_disabled') === 'true';
-        setIsHelpDisabled(disabled);
-
-        if (!disabled) {
-            // Initial showing after 10 seconds
+    useEffect(() => {
+        if (!isHelpDisabled) {
             const initialTimer = setTimeout(() => {
                 setShowHelpPopup(true);
-                setTimeout(() => setShowHelpPopup(false), 4000);
-            }, 10000);
+                setTimeout(() => setShowHelpPopup(false), 10000);
+            }, 2000);
 
-            // Repeat every 7 minutes
             const interval = setInterval(() => {
                 setShowHelpPopup(true);
-                setTimeout(() => setShowHelpPopup(false), 4000);
-            }, 7 * 60 * 1000);
+                setTimeout(() => setShowHelpPopup(false), 10000);
+            }, 5 * 60 * 1000);
 
             return () => {
                 clearTimeout(initialTimer);
@@ -85,7 +87,6 @@ export default function ChatWidget() {
     }, [isHelpDisabled]);
 
     useEffect(() => {
-        // 3. Connect Socket.IO to external backend
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
         socketRef.current = io(backendUrl);
 
@@ -101,9 +102,8 @@ export default function ChatWidget() {
                 localStorage.setItem('chat_messages', JSON.stringify(newMessages));
                 return newMessages;
             });
-            // Play a soft notification sound if open
             try {
-                const audio = new Audio('/notification.mp3'); // Optional: add a tiny click sound to public/
+                const audio = new Audio('/notification.mp3');
                 audio.play().catch(() => { });
             } catch (e) { }
         });
@@ -113,7 +113,6 @@ export default function ChatWidget() {
         };
     }, [sessionId]);
 
-    // Auto-scroll
     useEffect(() => {
         if (isOpen) {
             messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -137,7 +136,6 @@ export default function ChatWidget() {
         setInput('');
         setIsTyping(true);
 
-        // Send to Railway Backend via REST API
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
         try {
             await fetch(`${backendUrl}/chat/send`, {
@@ -176,14 +174,18 @@ export default function ChatWidget() {
 
     return (
         <div className={styles.widgetContainer}>
-            {/* Help Popup */}
             {showHelpPopup && !isOpen && (
                 <div className={styles.helpPopup}>
-                    <p>if you need help 3 agents online now</p>
+                    <p>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px', display: 'inline-block', verticalAlign: 'middle' }}>
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        if you need help 3 agents online now
+                    </p>
                     <div className={styles.helpArrow}></div>
                 </div>
             )}
-            {/* Chat Window */}
             {isOpen && (
                 <div className={`${styles.chatWindow} slide-up`}>
                     <div className={styles.chatHeader}>
@@ -281,7 +283,6 @@ export default function ChatWidget() {
                 </div>
             )}
 
-            {/* Floating Toggle Button */}
             {!isOpen && (
                 <button onClick={toggleChat} className={`${styles.floatingBtn} fade-in`}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
