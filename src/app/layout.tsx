@@ -10,6 +10,9 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Atlas Urban Craft | Sophisticated Artisanal Decor',
   description: 'Handcrafted luxury derived from cultural heritage. Brass sinks, copper lighting, curated collections.',
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 import { RAW_CATEGORIES } from '@/lib/constants';
