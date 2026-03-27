@@ -207,7 +207,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
                     {/* Left Sticky Column */}
                     <div className={styles.leftColumn}>
-                        <div className={`${styles.imageGallery} slide-up`}>
+                        <div className={styles.imageGallery}>
                             <img
                                 src={mainImage}
                                 alt={product.name}

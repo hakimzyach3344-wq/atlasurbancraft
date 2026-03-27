@@ -36,9 +36,12 @@
     .leftColumn {
         width: 55%;
         position: sticky;
-        top: 130px;
-        /* Offset for sticky header and breathing room */
+        top: 150px;
+        /* Offset to clear the sticky header */
         align-self: flex-start;
+        z-index: 10;
+        height: min-content;
+        /* Ensure container doesn't stretch */
     }
 }
 

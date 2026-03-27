@@ -90,6 +90,11 @@ export default function Navbar({ megaMenuProducts = {} }: NavbarProps) {
 
                 <div className={styles.topSection}>
                     <div className={`container ${styles.topContainer}`}>
+                        <div className={styles.mobileLogoBox}>
+                            <Link href="/" className={styles.mobileLogo}>
+                                <img src="/logo.png" alt="Atlas Urban Craft Logo" className={styles.logoImageMobile} />
+                            </Link>
+                        </div>
 
                         <div className={styles.categoryDropdownWrapper} ref={dropdownRef}>
                             <button
