@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
+import { v4 as uuidv4 } from 'uuid';
 import styles from './WhatsAppChat.module.css';
 
-const WHATSAPP_NUMBER = "+212708040530"; // Replace with actual number or allow as prop
+const WHATSAPP_NUMBER = "+212708040530";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
 
 export default function WhatsAppChat() {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,19 +15,48 @@ export default function WhatsAppChat() {
     const [isHelpDisabled, setIsHelpDisabled] = useState(false);
     const [messages, setMessages] = useState<any[]>([]);
     const [userInput, setUserInput] = useState("");
+    const [sessionId, setSessionId] = useState<string>("");
 
+    const socketRef = useRef<Socket | null>(null);
+    const chatBodyRef = useRef<HTMLDivElement>(null);
+
+    // 1. Initialize Session and Socket
     useEffect(() => {
+        // Load or create Session ID
+        let sid = localStorage.getItem('chat_session_id');
+        if (!sid) {
+            sid = uuidv4();
+            localStorage.setItem('chat_session_id', sid);
+        }
+        setSessionId(sid);
+
+        // Connect Socket
+        const socket = io(BACKEND_URL);
+        socketRef.current = socket;
+
+        socket.on('connect', () => {
+            console.log('Connected to backend');
+            socket.emit('register_session', sid);
+        });
+
+        socket.on('chat_history', (history: any[]) => {
+            setMessages(history);
+        });
+
+        socket.on('receive_message', (msg: any) => {
+            setMessages(prev => [...prev, msg]);
+        });
+
+        // Initial help logic
         const disabled = localStorage.getItem('whatsapp_help_disabled') === 'true';
         setIsHelpDisabled(disabled);
 
         if (!disabled) {
-            // Initial showing after 10 seconds
             const initialTimer = setTimeout(() => {
                 setShowHelpPopup(true);
                 setTimeout(() => setShowHelpPopup(false), 4000);
             }, 10000);
 
-            // Repeat every 7 minutes
             const interval = setInterval(() => {
                 setShowHelpPopup(true);
                 setTimeout(() => setShowHelpPopup(false), 4000);
@@ -33,28 +65,61 @@ export default function WhatsAppChat() {
             return () => {
                 clearTimeout(initialTimer);
                 clearInterval(interval);
+                socket.disconnect();
             };
         }
-    }, [isHelpDisabled]);
 
-    const sendMessage = (e?: React.FormEvent) => {
+        return () => socket.disconnect();
+    }, []);
+
+    // 2. Scroll to bottom when messages change
+    useEffect(() => {
+        if (chatBodyRef.current) {
+            chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+        }
+    }, [messages, isOpen]);
+
+    const sendMessage = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         if (!userInput.trim()) return;
 
-        const newMsg = { text: userInput, sender: 'user', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
-        setMessages([...messages, newMsg]);
-
-        // Forwarding logic placeholder: This is where you'd connect to Respond.io or Tiledesk
-        // For now, we simulate a bot response that leads to WhatsApp
-        setTimeout(() => {
-            setMessages(prev => [...prev, {
-                text: "Thanks! Our team has been notified. We reply via WhatsApp for speed. Click below to continue our chat there directly.",
-                sender: 'agent',
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            }]);
-        }, 1000);
-
+        const text = userInput;
         setUserInput("");
+
+        // Optimistically add to UI (though backend history will also sync)
+        // setMessages(prev => [...prev, { text, sender: 'user', timestamp: Date.now() }]);
+
+        try {
+            await fetch(`${BACKEND_URL}/chat/send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sessionId,
+                    text,
+                    userName: 'Website Visitor' // Could be dynamic
+                })
+            });
+        } catch (err) {
+            console.error("Failed to send message:", err);
+        }
+    };
+
+    const closeChatNotification = async () => {
+        try {
+            await fetch(`${BACKEND_URL}/chat/close`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sessionId,
+                    userName: 'Website Visitor'
+                })
+            });
+            // Clear local history for the UI if desired
+            setMessages([]);
+            setIsOpen(false);
+        } catch (err) {
+            console.error("Failed to close chat:", err);
+        }
     };
 
     const toggleChat = () => {
@@ -70,6 +135,10 @@ export default function WhatsAppChat() {
     const handleWhatsAppRedirect = () => {
         const message = "Hi, I'm contacting you from the website support chat.";
         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+    };
+
+    const formatTime = (ts: number) => {
+        return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     };
 
     return (
@@ -103,10 +172,15 @@ export default function WhatsAppChat() {
                                 <p className={styles.statusText}>Online | Fast Response</p>
                             </div>
                         </div>
-                        <button onClick={toggleChat} className={styles.closeChat}>×</button>
+                        <div className={styles.headerActions}>
+                            <button onClick={closeChatNotification} className={styles.closeChatBtn} title="Close this chat">
+                                Close Chat
+                            </button>
+                            <button onClick={toggleChat} className={styles.closeIcon}>×</button>
+                        </div>
                     </div>
 
-                    <div className={styles.chatBody}>
+                    <div className={styles.chatBody} ref={chatBodyRef}>
                         {messages.length === 0 ? (
                             <div className={styles.welcomeMessage}>
                                 <div className={styles.logoCircle}>A</div>
@@ -119,15 +193,18 @@ export default function WhatsAppChat() {
                                     <div key={i} className={`${styles.messageWrapper} ${m.sender === 'user' ? styles.userMsg : styles.agentMsg}`}>
                                         <div className={styles.messageBubble}>
                                             <p>{m.text}</p>
-                                            <span className={styles.msgTime}>{m.time}</span>
+                                            <span className={styles.msgTime}>{formatTime(m.timestamp)}</span>
                                         </div>
-                                        {m.sender === 'agent' && i === messages.length - 1 && (
-                                            <button onClick={handleWhatsAppRedirect} className={styles.continueWA}>
-                                                Continue on WhatsApp
-                                            </button>
-                                        )}
                                     </div>
                                 ))}
+                                {/* Show Redirect Button if the last message was from agent/ai */}
+                                {messages.length > 0 && messages[messages.length - 1].sender !== 'user' && (
+                                    <div className={styles.waRedirectContainer}>
+                                        <button onClick={handleWhatsAppRedirect} className={styles.continueWA}>
+                                            Continue on WhatsApp
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
@@ -170,3 +247,4 @@ export default function WhatsAppChat() {
         </div>
     );
 }
+
